@@ -19,22 +19,16 @@
 #define LOCALVOLUMETRICFOGBLENDINGMODE_MIN (3)
 #define LOCALVOLUMETRICFOGBLENDINGMODE_MAX (4)
 
-// Generated from UnityEngine.Rendering.HighDefinition.LocalVolumetricFogEngineData
+// Generated from UnityEngine.Rendering.HighDefinition.VolumetricMaterialRenderingData
 // PackingRules = Exact
-struct LocalVolumetricFogEngineData
+struct VolumetricMaterialRenderingData
 {
-    float3 scattering;
-    float extinction;
-    float3 textureTiling;
-    int invertFade;
-    float3 textureScroll;
-    float rcpDistFadeLen;
-    float3 rcpPosFaceFade;
-    float endTimesRcpDistFadeLen;
-    float3 rcpNegFaceFade;
-    int blendingMode;
-    float3 albedo;
-    int falloffMode;
+    float4 viewSpaceBounds;
+    uint startSliceIndex;
+    uint sliceCount;
+    uint padding0;
+    uint padding1;
+    float4 obbVertexPositionWS[8];
 };
 
 // Generated from UnityEngine.Rendering.HighDefinition.ShaderVariablesVolumetric
@@ -61,16 +55,22 @@ CBUFFER_START(ShaderVariablesVolumetric)
     uint _Pad1_SVV;
 CBUFFER_END
 
-// Generated from UnityEngine.Rendering.HighDefinition.VolumetricMaterialRenderingData
+// Generated from UnityEngine.Rendering.HighDefinition.LocalVolumetricFogEngineData
 // PackingRules = Exact
-struct VolumetricMaterialRenderingData
+struct LocalVolumetricFogEngineData
 {
-    float4 viewSpaceBounds;
-    uint startSliceIndex;
-    uint sliceCount;
-    uint padding0;
-    uint padding1;
-    float4 obbVertexPositionWS[8];
+    float3 scattering;
+    float extinction;
+    float3 textureTiling;
+    int invertFade;
+    float3 textureScroll;
+    float rcpDistFadeLen;
+    float3 rcpPosFaceFade;
+    float endTimesRcpDistFadeLen;
+    float3 rcpNegFaceFade;
+    int blendingMode;
+    float3 albedo;
+    int falloffMode;
 };
 
 // Generated from UnityEngine.Rendering.HighDefinition.VolumetricMaterialDataCBuffer
