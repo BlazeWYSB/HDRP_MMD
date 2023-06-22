@@ -16,7 +16,13 @@ MonoBehaviour:
   enable:
     m_OverrideState: 1
     m_Value: 1
-  gridSize:
+  minGridSize:
+    m_OverrideState: 0
+    m_Value: 50
+  maxGridSize:
+    m_OverrideState: 0
+    m_Value: 2500
+  elevationTransition:
     m_OverrideState: 0
     m_Value: 1000
   numLevelOfDetails:
@@ -178,10 +184,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   upperHemisphereLuxValue:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.4660715
   upperHemisphereLuxColor:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 0.18750614, y: 0.29181972, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 0
@@ -546,6 +552,9 @@ MonoBehaviour:
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
+  specularOcclusion:
+    m_OverrideState: 0
+    m_Value: 0.5
   occluderMotionRejection:
     m_OverrideState: 0
     m_Value: 1
@@ -569,7 +578,7 @@ MonoBehaviour:
     m_Value: 2
   m_RayLength:
     m_OverrideState: 0
-    m_Value: 3
+    m_Value: 1
   m_SampleCount:
     m_OverrideState: 0
     m_Value: 2
