@@ -871,7 +871,17 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     // Used for sharpening by alpha to mask
     builtinData.alphaClipTreshold = _AlphaCutoff;
 #endif
-
+                                           
+    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.matCapColor = float3(0,0,0);   
+    surfaceData.curveColor = 0;
+    surfaceData.nprFeatures = 0;        
+#if defined(_PGR)     
+    surfaceData.ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
+    surfaceData.matCapColor = float3(1,1,1);
+    surfaceData.curveColor = 1;
+    surfaceData.nprFeatures = 1;
+#endif
     RAY_TRACING_OPTIONAL_ALPHA_TEST_PASS
 }
 #ifndef SHADER_STAGE_RAY_TRACING

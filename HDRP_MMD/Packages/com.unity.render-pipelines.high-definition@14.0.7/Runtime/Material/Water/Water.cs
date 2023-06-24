@@ -60,6 +60,7 @@ namespace UnityEngine.Rendering.HighDefinition
         [GenerateHLSL(PackingRules.Exact, false, false, true, 1650)]
         public struct BSDFData
         {
+            public uint materialFeatures;
             // Base color on the water
             [SurfaceDataAttributes("", false, true)]
             public Vector3 diffuseColor;

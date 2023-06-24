@@ -35,8 +35,12 @@
 #define GBUFFER_LIT_IRIDESCENCE      5 // TODO       
 #define GBUFFER_LIT_NPR              6 // TODO    
 #define GBUFFER_LIT_ANISOTROPIC_NPR  7
+
+
 #define GBUFFER_LIT_SSS_NPR          8 // TODO    
-#define GBUFFER_LIT_IRIDESCENCE_NPR  9 // TODO     
+#define GBUFFER_LIT_IRIDESCENCE_NPR  9 // TODO        
+#define GBUFFER_LIT_Face_NPR         10 // TODO       
+#define GBUFFER_LIT_Hair_NPR         11 // TODO     
 
 #ifdef UNITY_VIRTUAL_TEXTURING
 #define GBUFFERMATERIAL_VTFEEDBACK 1

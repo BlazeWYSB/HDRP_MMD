@@ -34,8 +34,8 @@ namespace UnityEditor.Rendering.HighDefinition
             /// </summary>
             public override void LoadMaterialProperties()
             {
-                nprAOMap = FindProperty(kNPRAOMap);
                 outlineStrength = FindProperty(kOutlineStrength);
+                nprAOMap = FindProperty(kNPRAOMap);
             }
 
             /// <summary>

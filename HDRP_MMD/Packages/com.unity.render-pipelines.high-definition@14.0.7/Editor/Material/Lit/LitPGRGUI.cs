@@ -25,7 +25,7 @@ namespace UnityEditor.Rendering.HighDefinition
             new TransparencyUIBlock(MaterialUIBlock.ExpandableBit.Transparency, features: TransparencyUIBlock.Features.All & ~TransparencyUIBlock.Features.Distortion),
             new EmissionUIBlock(MaterialUIBlock.ExpandableBit.Emissive),
             new AdvancedOptionsUIBlock(MaterialUIBlock.ExpandableBit.Advance, AdvancedOptionsUIBlock.Features.StandardLit),
-            new PGRUIBlock(MaterialUIBlock.ExpandableBit.PGR),
+            new PGRUIBlock(MaterialUIBlock.ExpandableBit.LayeringOption3),
         };
 
         protected override void OnMaterialGUI(MaterialEditor materialEditor, MaterialProperty[] props)

@@ -10,8 +10,7 @@ Shader "Blaze/PGR_OutLine"
         [MainTexture] _BaseColorMap("BaseColorMap", 2D) = "white" {}
         [HideInInspector] _BaseColorMap_MipInfo("_BaseColorMap_MipInfo", Vector) = (0, 0, 0, 0)
 
-        _OutlineStrength("Outline", Range(0.0, 10.0)) = 1
-
+        _Metallic("_Metallic", Range(0.0, 1.0)) = 0
         _Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
         _MaskMap("MaskMap", 2D) = "white" {}
         _MetallicRemapMin("MetallicRemapMin", Float) = 0.0
@@ -208,7 +207,7 @@ Shader "Blaze/PGR_OutLine"
         [ToggleUI] _ReceivesSSR("Receives SSR", Float) = 1.0
         [ToggleUI] _ReceivesSSRTransparent("Receives SSR Transparent", Float) = 0.0
         [ToggleUI] _AddPrecomputedVelocity("AddPrecomputedVelocity", Float) = 0.0
-
+         _OutlineStrength("Outline", Range(0.0, 10.0)) = 1
         // Ray Tracing
         [ToggleUI] _RayTracing("Ray Tracing (Preview)", Float) = 0
 
@@ -263,8 +262,7 @@ Shader "Blaze/PGR_OutLine"
     #pragma shader_feature_local_fragment _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #pragma shader_feature_local_raytracing _ENABLESPECULAROCCLUSION
     #pragma shader_feature_local_raytracing _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
-    
-    #define _NPR_OUTLINE
+
     #ifdef _ENABLESPECULAROCCLUSION
     #define _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #endif
@@ -322,12 +320,10 @@ Shader "Blaze/PGR_OutLine"
     //-------------------------------------------------------------------------------------
     // Define
     //-------------------------------------------------------------------------------------
-    
-    #define ATTRIBUTES_NEED_TANGENT
-    #define ATTRIBUTES_NEED_COLOR
+
     // This shader support recursive rendering for raytracing
     #define HAVE_RECURSIVE_RENDERING
-
+    #define _NPR_OUTLINE
     // This shader support vertex modification
     #define HAVE_VERTEX_MODIFICATION
 

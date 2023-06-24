@@ -424,12 +424,15 @@ MATERIALFEATUREFLAGS_LIT_STANDARD;
     surfaceData.transmittanceMask = 0.0;
 
 #endif // #if !defined(LAYERED_LIT_SHADER)
-                         
+    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.matCapColor = float3(0,0,0);   
+    surfaceData.curveColor = 0;
+    surfaceData.nprFeatures = 0;
 #if defined(_PGR)     
     surfaceData.ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
     surfaceData.matCapColor = float3(1,1,1);
     surfaceData.curveColor = 1;
-
+    surfaceData.nprFeatures = 1;
 #endif
     return alpha;
 }

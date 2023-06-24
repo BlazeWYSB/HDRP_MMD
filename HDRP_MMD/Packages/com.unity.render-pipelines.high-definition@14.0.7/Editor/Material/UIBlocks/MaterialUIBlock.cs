@@ -90,12 +90,13 @@ namespace UnityEditor.Rendering.HighDefinition
             LayeringOption2 = 1 << 29,
             ///<summary>Reserved LayeringOption3 Bit</summary>
             LayeringOption3 = 1 << 30,
+            
 
             // Note that we use the bit reserved for layered material UI in this enum, we can do this
             // because this enum will be used for ShaderGraph custom UI and we can't author layered
             // shader in shadergraph.
             ///<summary>User Bit 0</summary>
-            PGR = 1 << 11,
+            User0 = 1 << 11,
             ///<summary>User Bit 1</summary>
             User1 = 1 << 12,
             ///<summary>User Bit 2</summary>
@@ -134,6 +135,7 @@ namespace UnityEditor.Rendering.HighDefinition
             User18 = 1 << 29,
             ///<summary>User Bit 19</summary>
             User19 = 1 << 30,
+            PGR = 1 << 30,
         }
 
         /// <summary>

@@ -47,12 +47,8 @@ DirectLighting ShadeSurface_Infinitesimal(PreLightData preLightData, BSDFData bs
         // the optimization pass of the compiler will remove all of the associated code.
         // However, this will take a lot more CPU time than doing the same thing using
         // the preprocessor.
-        lighting.diffuse  = (cbsdf.diffR + cbsdf.diffT * transmittance) * lightColor * diffuseDimmer*0;
-        lighting.specular = (cbsdf.specR + cbsdf.specT * transmittance) * lightColor * specularDimmer * 0;
-#ifdef _PGR
-    lighting.diffuse = (cbsdf.diffR + cbsdf.diffT * transmittance) * lightColor * diffuseDimmer;
-#endif 
-
+        lighting.diffuse  = (cbsdf.diffR + cbsdf.diffT * transmittance) * lightColor * diffuseDimmer;
+        lighting.specular = (cbsdf.specR + cbsdf.specT * transmittance) * lightColor * specularDimmer;
     }
 #ifdef DEBUG_DISPLAY
     if (_DebugLightingMode == DEBUGLIGHTINGMODE_LUX_METER)

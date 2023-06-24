@@ -18,7 +18,10 @@ namespace UnityEngine.Rendering.HighDefinition
             LitTransmission = 1 << 3,
             LitAnisotropy = 1 << 4,
             LitIridescence = 1 << 5,
-            LitClearCoat = 1 << 6
+            LitClearCoat = 1 << 6,
+            LitNPR = 1 << 7,
+            LitNPRFace = 1 << 8,
+            LitNPRHair = 1 << 9
         };
 
         //-----------------------------------------------------------------------------
@@ -31,6 +34,8 @@ namespace UnityEngine.Rendering.HighDefinition
         {
             [SurfaceDataAttributes("Material Features")]
             public uint materialFeatures;
+            [SurfaceDataAttributes("NPR Features")]
+            public uint nprFeatures;
 
             // Standard
             [MaterialSharedPropertyMapping(MaterialSharedProperty.Albedo)]
@@ -64,6 +69,12 @@ namespace UnityEngine.Rendering.HighDefinition
             [MaterialSharedPropertyMapping(MaterialSharedProperty.Specular)]
             [SurfaceDataAttributes("Specular Color", false, true, FieldPrecision.Real)]
             public Vector3 specularColor;
+            [SurfaceDataAttributes("Mat Cap Color", false, true, FieldPrecision.Real)]
+            public Vector3 matCapColor;
+            [SurfaceDataAttributes("Curve Color", precision = FieldPrecision.Real)]
+            public float curveColor;
+            [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
+            public Vector3 ilmColor;
 
             // SSS
             [SurfaceDataAttributes("Diffusion Profile Hash")]
@@ -133,6 +144,9 @@ namespace UnityEngine.Rendering.HighDefinition
 
             [SurfaceDataAttributes(precision = FieldPrecision.Real)]
             public float coatMask;
+
+            [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
+            public Vector3 ilmColor;
 
             // MaterialFeature dependent attribute
 
