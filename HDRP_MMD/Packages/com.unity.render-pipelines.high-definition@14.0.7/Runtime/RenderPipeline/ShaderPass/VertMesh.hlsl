@@ -1,3 +1,5 @@
+#define UNITY_MATRIX_IT_MV transpose(mul(UNITY_MATRIX_I_M, UNITY_MATRIX_I_V))
+
 struct VaryingsToPS
 {
     VaryingsMeshToPS vmesh;
@@ -204,8 +206,28 @@ VaryingsMeshType VertMesh(AttributesMesh input, float3 worldSpaceOffset
 #ifdef VARYINGS_NEED_POSITIONPREDISPLACEMENT_WS
     output.positionPredisplacementRWS = positionRWS;
 #endif
-
+                           
+#ifdef _NPR_OUTLINE
+    float2 rg=input.color.rg*2-1;
+    float b=sqrt(1-dot(rg,rg));
+    float3 vertNormal =float3(rg,b);
+    float3 normalos= normalize(input.normalOS.xyz);
+    float3 tangentos= normalize(input.tangentOS.xyz);
+    float3 bitangent = cross(normalos,tangentos.xyz) * input.tangentOS.w ;
+    //TBN reverse
+	float3x3 TtoO = float3x3(tangentos.x, bitangent.x, normalos.x,
+							tangentos.y, bitangent.y, normalos.y,
+							tangentos.z, bitangent.z, normalos.z);
+	vertNormal = mul(TtoO, vertNormal);	
+#endif
     output.positionCS = TransformWorldToHClip(positionRWS);
+#ifdef _NPR_OUTLINE                             
+    //normal to view space                                                     
+    float3 vNormal = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, vertNormal.xyz));
+    //to clip space
+    float2 projPos = normalize(mul((float2x2)UNITY_MATRIX_P,vNormal.xy));
+    output.positionCS.xy += projPos * _OutlineStrength * 0.01;
+#endif
 #ifdef VARYINGS_NEED_TANGENT_TO_WORLD
     output.normalWS = normalWS;
     output.tangentWS = tangentWS;

@@ -32,7 +32,11 @@
 #define GBUFFER_LIT_TRANSMISSION     2
 #define GBUFFER_LIT_TRANSMISSION_SSS 3
 #define GBUFFER_LIT_ANISOTROPIC      4
-#define GBUFFER_LIT_IRIDESCENCE      5 // TODO
+#define GBUFFER_LIT_IRIDESCENCE      5 // TODO       
+#define GBUFFER_LIT_NPR              6 // TODO    
+#define GBUFFER_LIT_ANISOTROPIC_NPR  7
+#define GBUFFER_LIT_SSS_NPR          8 // TODO    
+#define GBUFFER_LIT_IRIDESCENCE_NPR  9 // TODO     
 
 #ifdef UNITY_VIRTUAL_TEXTURING
 #define GBUFFERMATERIAL_VTFEEDBACK 1
@@ -41,7 +45,7 @@
 #endif
 
 // Caution: This must be in sync with Lit.cs GetMaterialGBufferCount()
-#define GBUFFERMATERIAL_COUNT (4 + GBUFFERMATERIAL_VTFEEDBACK + GBUFFERMATERIAL_LIGHT_LAYERS + GBUFFERMATERIAL_SHADOWMASK)
+#define GBUFFERMATERIAL_COUNT (4 + 1 + 0 + GBUFFERMATERIAL_SHADOWMASK)
 
 // Only one deferred layout is allowed for a HDRenderPipeline, this will be detect by the redefinition of GBUFFERMATERIAL_COUNT
 // If GBUFFERMATERIAL_COUNT is define two time, the shaders will not compile

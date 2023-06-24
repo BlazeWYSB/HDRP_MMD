@@ -106,7 +106,9 @@ void GenerateLayerTexCoordBasisTB(FragInputs input, inout LayerTexCoord layerTex
 
 #define SAMPLER_SUBSURFACE_MASK_MAP_IDX sampler_SubsurfaceMaskMap
 #define SAMPLER_TRANSMISSION_MASK_MAP_IDX sampler_TransmissionMaskMap
-#define SAMPLER_THICKNESSMAP_IDX sampler_ThicknessMap
+#define SAMPLER_THICKNESSMAP_IDX sampler_ThicknessMap         
+
+#define SAMPLER_NPRAOMap_IDX sampler_NPRAOMap
 
 // include LitDataIndividualLayer to define GetSurfaceData
 #define LAYER_INDEX 0
@@ -135,7 +137,10 @@ void GenerateLayerTexCoordBasisTB(FragInputs input, inout LayerTexCoord layerTex
 #endif
 #ifdef _BENTNORMALMAP
 #define _BENTNORMALMAP_IDX
-#endif
+#endif                
+#ifdef _NPRAOMap
+#define _NPRAOMap_IDX         
+#endif                
 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitDataIndividualLayer.hlsl"
 
 // This maybe call directly by tessellation (domain) shader, thus all part regarding surface gradient must be done

@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 
 // SurfaceData is define in Lit.cs which generate Lit.cs.hlsl
-#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.cs.hlsl"
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitNPR.cs.hlsl"
 // Those define allow to include desired SSS/Transmission functions
 #define MATERIAL_INCLUDE_SUBSURFACESCATTERING
 #define MATERIAL_INCLUDE_TRANSMISSION
@@ -521,7 +521,7 @@ BSDFData ConvertSurfaceDataToBSDFData(uint2 positionSS, SurfaceData surfaceData)
 
 // Encode SurfaceData (BSDF parameters) into GBuffer
 // Must be in sync with RT declared in HDRenderPipeline.cs ::Rebuild
-void EncodeIntoGBuffer( SurfaceData surfaceData
+void EncodeIntoGBuffer(SurfaceData surfaceData
                         , BuiltinData builtinData
                         , uint2 positionSS
                         , out GBufferType0 outGBuffer0
@@ -539,6 +539,7 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
 #endif
                         )
 {
+    outGBuffer4 = float4(0, 0, 0, 0);           
     // When using APV we need to know if we have lightmaps or not.
     // we chose to encode this information into the specularOcclusion
 #if defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)
@@ -546,6 +547,7 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
 #else
     float encodedSpecularOcclusion = surfaceData.specularOcclusion;
 #endif
+
     // RT0 - 8:8:8:8 sRGB
     // Warning: the contents are later overwritten for Standard and SSS!
     outGBuffer0 = float4(surfaceData.baseColor, encodedSpecularOcclusion);
@@ -562,7 +564,13 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
         if ((surfaceData.materialFeatures & (MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING | MATERIALFEATUREFLAGS_LIT_TRANSMISSION)) == (MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING | MATERIALFEATUREFLAGS_LIT_TRANSMISSION))
             materialFeatureId = GBUFFER_LIT_TRANSMISSION_SSS;
         else if ((surfaceData.materialFeatures & MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING) == MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING)
-            materialFeatureId = GBUFFER_LIT_SSS;
+        {
+            materialFeatureId = GBUFFER_LIT_SSS;        
+                               
+        #if _PGR                         
+            materialFeatureId = GBUFFER_LIT_SSS_NPR;
+        #endif
+        }
         else
             materialFeatureId = GBUFFER_LIT_TRANSMISSION;
 
@@ -585,6 +593,9 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
     {
         materialFeatureId = GBUFFER_LIT_ANISOTROPIC;
 
+        #if _PGR                         
+        materialFeatureId = GBUFFER_LIT_ANISOTROPIC_NPR;
+        #endif
         // Reconstruct the default tangent frame.
         float3x3 frame = GetLocalFrame(surfaceData.normalWS);
 
@@ -644,7 +655,10 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
     else if (HasFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_LIT_IRIDESCENCE))
     {
         materialFeatureId = GBUFFER_LIT_IRIDESCENCE;
-
+                      
+        #if _PGR                         
+        materialFeatureId = GBUFFER_LIT_IRIDESCENCE_NPR;
+        #endif
         outGBuffer2.rgb = float3(surfaceData.iridescenceMask, surfaceData.iridescenceThickness,
                                  PackFloatInt8bit(surfaceData.metallic, 0, 8));
     }
@@ -654,7 +668,10 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
         // so decoding is more efficient (it allow better optimization for the compiler and save VGPR)
         // This mean that on the decode side, MATERIALFEATUREFLAGS_LIT_SPECULAR_COLOR doesn't exist anymore
         materialFeatureId = GBUFFER_LIT_STANDARD;
-
+                                               
+        #if _PGR                         
+        materialFeatureId = GBUFFER_LIT_NPR;
+        #endif
         float3 diffuseColor = surfaceData.baseColor;
         float3 fresnel0     = surfaceData.specularColor;
 
@@ -712,15 +729,16 @@ void EncodeIntoGBuffer( SurfaceData surfaceData
         outGBuffer3.xz = AO_IN_GBUFFER3_TAG.xz;
         outGBuffer3.y = surfaceData.ambientOcclusion;
     }
-
-    
+             
 //#ifdef LIGHT_LAYERS
 //    // Note: we need to mask out only 8bits of the layer mask before encoding it as otherwise any value > 255 will map to all layers active
 //    // Channels xyz are not written to because of the ColorMask
 //    OUT_GBUFFER_LIGHT_LAYERS = float4(0.0, 0.0, 0.0, (builtinData.renderingLayers & 0x000000FF) / 255.0);
 //#endif
-                                       
-    outGBuffer4 = float4(0, 0, 0, 0);
+                                        
+#ifdef _PGR                                                                        
+    outGBuffer4 =  float4(surfaceData.ilmColor.rgb, surfaceData.matCapColor.r);         
+#endif                                    
 #ifdef SHADOWS_SHADOWMASK
     OUT_GBUFFER_SHADOWMASK = BUILTIN_DATA_SHADOW_MASK;
 #endif
@@ -743,23 +761,28 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     // bsdfData.anisotropy == 0, bsdfData.subsurfaceMask == 0, etc...
     ZERO_INITIALIZE(BSDFData, bsdfData);
     // Note: Some properties of builtinData are not used, just init all at 0 to silent the compiler
-    ZERO_INITIALIZE(BuiltinData, builtinData);     
+    ZERO_INITIALIZE(BuiltinData, builtinData);
+                                              
     // Isolate material features.
     tileFeatureFlags &= MATERIAL_FEATURE_MASK_FLAGS;
+
     GBufferType0 inGBuffer0 = LOAD_TEXTURE2D_X(_GBufferTexture0, positionSS);
     GBufferType1 inGBuffer1 = LOAD_TEXTURE2D_X(_GBufferTexture1, positionSS);
     GBufferType2 inGBuffer2 = LOAD_TEXTURE2D_X(_GBufferTexture2, positionSS);
-
-    // Avoid to introduce a new variant for light layer as it is already long to compile
-    if (_EnableLightLayers)
-    {
-        float4 inGBuffer4 = LOAD_TEXTURE2D_X(_LightLayersTexture, positionSS);
-        builtinData.renderingLayers = uint(inGBuffer4.w * 255.5);
-    }
-    else
-    {
+                                
+#ifdef _PGR
+    bsdfData.ilmColor = LOAD_TEXTURE2D_X(_LightLayersTexture, positionSS).rgb;
+#endif 
+    //// Avoid to introduce a new variant for light layer as it is already long to compile
+    //if (_EnableLightLayers)
+    //{
+    //    float4 inGBuffer4 = LOAD_TEXTURE2D_X(_LightLayersTexture, positionSS);
+    //    builtinData.renderingLayers = uint(inGBuffer4.w * 255.5);
+    //}
+    //else
+    //{
         builtinData.renderingLayers = DEFAULT_LIGHT_LAYERS;
-    }
+    //}
 
     // We know the GBufferType no need to use abstraction
 #ifdef SHADOWS_SHADOWMASK
@@ -783,12 +806,12 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     UnpackFloatInt8bit(inGBuffer2.a, 8, coatMask, materialFeatureId);
 
     uint pixelFeatureFlags    = MATERIALFEATUREFLAGS_LIT_STANDARD; // Only sky/background do not have the Standard flag.
-    bool pixelHasSubsurface   = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_SSS;
+    bool pixelHasSubsurface   = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_SSS || materialFeatureId == GBUFFER_LIT_SSS_NPR;
     bool pixelHasTransmission = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_TRANSMISSION;
-    bool pixelHasAnisotropy   = materialFeatureId == GBUFFER_LIT_ANISOTROPIC;
-    bool pixelHasIridescence  = materialFeatureId == GBUFFER_LIT_IRIDESCENCE;
+    bool pixelHasAnisotropy   = materialFeatureId == GBUFFER_LIT_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR;
+    bool pixelHasIridescence  = materialFeatureId == GBUFFER_LIT_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
     bool pixelHasClearCoat    = coatMask > 0.0;
-
+    bool pixelHasNRP          = materialFeatureId == GBUFFER_LIT_NPR || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_SSS_NPR || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
     // Disable pixel features disabled by the tile.
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasSubsurface   ? MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING : 0);
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasTransmission ? MATERIALFEATUREFLAGS_LIT_TRANSMISSION          : 0);
@@ -976,7 +999,7 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
             builtinData.bakeDiffuseLighting = gbuffer3;
         }
     }
-
+                             
     ApplyDebugToBSDFData(bsdfData);
 
     return pixelFeatureFlags;
@@ -986,7 +1009,7 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
 uint MaterialFeatureFlagsFromGBuffer(uint2 positionSS)
 {
     BSDFData bsdfData;
-    BuiltinData unused;               
+    BuiltinData unused;                        
     // Call the regular function, compiler will optimized out everything not used.
     // Note that all material feature flag bellow are in the same GBuffer (inGBuffer2) and thus material classification only sample one Gbuffer
     return DecodeFromGBuffer(positionSS, UINT_MAX, bsdfData, unused);
@@ -1003,25 +1026,25 @@ void GetSurfaceDataDebug(uint paramId, SurfaceData surfaceData, inout float3 res
     // Overide debug value output to be more readable
     switch (paramId)
     {
-    case DEBUGVIEW_LIT_SURFACEDATA_NORMAL_VIEW_SPACE:
+    case DEBUGVIEW_LITNPR_SURFACEDATA_NORMAL_VIEW_SPACE:
         {
             float3 vsNormal = TransformWorldToViewDir(surfaceData.normalWS);
             result = IsNormalized(vsNormal) ?  vsNormal * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
             break;
         }
-    case DEBUGVIEW_LIT_SURFACEDATA_MATERIAL_FEATURES:
+    case DEBUGVIEW_LITNPR_SURFACEDATA_MATERIAL_FEATURES:
         result = (surfaceData.materialFeatures.xxx) / 255.0; // Aloow to read with color picker debug mode
         break;
-    case DEBUGVIEW_LIT_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
+    case DEBUGVIEW_LITNPR_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
         {
             float3 vsGeomNormal = TransformWorldToViewDir(surfaceData.geomNormalWS);
             result = IsNormalized(vsGeomNormal) ?  vsGeomNormal * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
             break;
         }
-    case DEBUGVIEW_LIT_SURFACEDATA_INDEX_OF_REFRACTION:
+    case DEBUGVIEW_LITNPR_SURFACEDATA_INDEX_OF_REFRACTION:
         result = saturate((surfaceData.ior - 1.0) / 1.5).xxx;
         break;
-    case DEBUGVIEW_LIT_SURFACEDATA_SPECULAR_COLOR:
+    case DEBUGVIEW_LITNPR_SURFACEDATA_SPECULAR_COLOR:
         {
             if (!HasFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_LIT_SPECULAR_COLOR))
             {
@@ -1040,23 +1063,23 @@ void GetBSDFDataDebug(uint paramId, BSDFData bsdfData, inout float3 result, inou
     // Overide debug value output to be more readable
     switch (paramId)
     {
-    case DEBUGVIEW_LIT_BSDFDATA_NORMAL_VIEW_SPACE:
+    case DEBUGVIEW_LITNPR_BSDFDATA_NORMAL_VIEW_SPACE:
         // Convert to view space
         {
             float3 vsNormal = TransformWorldToViewDir(bsdfData.normalWS);
             result = IsNormalized(vsNormal) ?  vsNormal * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
             break;
         }
-    case DEBUGVIEW_LIT_BSDFDATA_MATERIAL_FEATURES:
+    case DEBUGVIEW_LITNPR_BSDFDATA_MATERIAL_FEATURES:
         result = (bsdfData.materialFeatures.xxx) / 255.0; // Aloow to read with color picker debug mode
         break;
-    case DEBUGVIEW_LIT_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
+    case DEBUGVIEW_LITNPR_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
         {
             float3 vsGeomNormal = TransformWorldToViewDir(bsdfData.geomNormalWS);
             result = IsNormalized(vsGeomNormal) ?  vsGeomNormal * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
             break;
         }
-    case DEBUGVIEW_LIT_BSDFDATA_IOR:
+    case DEBUGVIEW_LITNPR_BSDFDATA_IOR:
         result = saturate((bsdfData.ior - 1.0) / 1.5).xxx;
         break;
     }
@@ -1420,8 +1443,8 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
     }
 
     // The compiler should optimize these. Can revisit later if necessary.
-    cbsdf.diffR = diffTerm * clampedNdotL;
-    cbsdf.diffT = diffTerm * flippedNdotL;
+    cbsdf.diffR = diffTerm * clampedNdotL*0;
+    cbsdf.diffT = diffTerm * flippedNdotL*0;
 
     // Probably worth branching here for perf reasons.
     // This branch will be optimized away if there's no transmission.

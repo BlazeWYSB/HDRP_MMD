@@ -2,10 +2,18 @@ struct AttributesMesh
 {
     float3 positionOS   : POSITION;
 #ifdef ATTRIBUTES_NEED_NORMAL
-    float3 normalOS     : NORMAL;
+    float3 normalOS     : NORMAL;          
+#else   
+#ifdef _NPR_OUTLINE              
+    float3 normalOS     : NORMAL;          
+#endif
 #endif
 #ifdef ATTRIBUTES_NEED_TANGENT
     float4 tangentOS    : TANGENT; // Store sign in w
+#else   
+#ifdef _NPR_OUTLINE    
+    float4 tangentOS    : TANGENT; // Store sign in w
+#endif
 #endif
 #ifdef ATTRIBUTES_NEED_TEXCOORD0
     float2 uv0          : TEXCOORD0;
@@ -20,7 +28,11 @@ struct AttributesMesh
     float2 uv3          : TEXCOORD3;
 #endif
 #ifdef ATTRIBUTES_NEED_COLOR
-    float4 color        : COLOR;
+    float4 color        : COLOR;        
+#else   
+#ifdef _NPR_OUTLINE                                      
+    float4 color        : COLOR;        
+#endif
 #endif
 
     UNITY_VERTEX_INPUT_INSTANCE_ID

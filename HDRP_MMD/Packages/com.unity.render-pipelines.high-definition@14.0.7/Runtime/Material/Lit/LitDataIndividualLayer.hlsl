@@ -194,9 +194,11 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
     float3 detailNormalTS = float3(0.0, 0.0, 0.0);
     float detailMask = 0.0;
 #ifdef _DETAIL_MAP_IDX
-    detailMask = 1.0;
+    detailMask = 1.0;      
     #ifdef _MASKMAP_IDX
-        detailMask = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).b;
+    #ifndef _PGRPBR
+        detailMask = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).b;     
+    #endif
     #endif
     float2 detailAlbedoAndSmoothness = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_DetailMap), SAMPLER_DETAILMAP_IDX, ADD_IDX(layerTexCoord.details)).rb;
     float detailAlbedo = detailAlbedoAndSmoothness.r * 2.0 - 1.0;
@@ -232,10 +234,15 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
     bentNormalTS = ADD_IDX(GetBentNormalTS)(input, layerTexCoord, normalTS, detailNormalTS, detailMask);
 
 #if defined(_MASKMAP_IDX)
+#if defined(_PGRPBR)           
+    surfaceData.perceptualSmoothness =  SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).r;
+    surfaceData.perceptualSmoothness =  1 - lerp(ADD_IDX(_SmoothnessRemapMin), ADD_IDX(_SmoothnessRemapMax), surfaceData.perceptualSmoothness);
+#else
     surfaceData.perceptualSmoothness = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).a;
     surfaceData.perceptualSmoothness = lerp(ADD_IDX(_SmoothnessRemapMin), ADD_IDX(_SmoothnessRemapMax), surfaceData.perceptualSmoothness);
+#endif
 #else
-    surfaceData.perceptualSmoothness = ADD_IDX(_Smoothness);
+    surfaceData.perceptualSmoothness = ADD_IDX(_Smoothness);      
 #endif
 
 #ifdef _DETAIL_MAP_IDX
@@ -248,10 +255,17 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
 
     // MaskMap is RGBA: Metallic, Ambient Occlusion (Optional), detail Mask (Optional), Smoothness
 #ifdef _MASKMAP_IDX
+#if defined(_PGRPBR)                                                                                                                                        
+    surfaceData.metallic = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).g;
+    surfaceData.metallic = lerp(ADD_IDX(_MetallicRemapMin), ADD_IDX(_MetallicRemapMax), surfaceData.metallic);
+    surfaceData.ambientOcclusion = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).b;
+    surfaceData.ambientOcclusion = lerp(ADD_IDX(_AORemapMin), ADD_IDX(_AORemapMax), surfaceData.ambientOcclusion); 
+#else                                                                                                                                        
     surfaceData.metallic = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).r;
     surfaceData.metallic = lerp(ADD_IDX(_MetallicRemapMin), ADD_IDX(_MetallicRemapMax), surfaceData.metallic);
     surfaceData.ambientOcclusion = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).g;
-    surfaceData.ambientOcclusion = lerp(ADD_IDX(_AORemapMin), ADD_IDX(_AORemapMax), surfaceData.ambientOcclusion);
+    surfaceData.ambientOcclusion = lerp(ADD_IDX(_AORemapMin), ADD_IDX(_AORemapMax), surfaceData.ambientOcclusion);  
+#endif
 #else
     surfaceData.metallic = ADD_IDX(_Metallic);
     surfaceData.ambientOcclusion = 1.0;
@@ -280,7 +294,8 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
 #if !defined(LAYERED_LIT_SHADER)
 
     // These static material feature allow compile time optimization
-    surfaceData.materialFeatures = MATERIALFEATUREFLAGS_LIT_STANDARD;
+    surfaceData.materialFeatures =
+MATERIALFEATUREFLAGS_LIT_STANDARD;
 
 #ifdef _MATERIAL_FEATURE_SUBSURFACE_SCATTERING
     surfaceData.materialFeatures |= MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING;
@@ -409,6 +424,12 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
     surfaceData.transmittanceMask = 0.0;
 
 #endif // #if !defined(LAYERED_LIT_SHADER)
+                         
+#if defined(_PGR)     
+    surfaceData.ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
+    surfaceData.matCapColor = float3(1,1,1);
+    surfaceData.curveColor = 1;
 
+#endif
     return alpha;
 }

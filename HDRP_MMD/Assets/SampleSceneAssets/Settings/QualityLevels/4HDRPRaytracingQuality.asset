@@ -26,7 +26,7 @@ MonoBehaviour:
     supportVolumetrics: 1
     supportVolumetricClouds: 1
     supportLightLayers: 1
-    supportWater: 0
+    supportWater: 1
     waterSimulationResolution: 128
     waterCPUSimulation: 0
     supportDistortion: 1
@@ -491,5 +491,5 @@ MonoBehaviour:
   m_ObsoleteShaderVariantLogLevel: 0
   m_ObsoleteLensAttenuation: 0
   m_ObsoleteDiffusionProfileSettingsList:
-  - {fileID: 11400000, guid: 26bdddf49760c61438938733f07fa2a2, type: 2}
-  - {fileID: 11400000, guid: 78322c7f82657514ebe48203160e3f39, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}

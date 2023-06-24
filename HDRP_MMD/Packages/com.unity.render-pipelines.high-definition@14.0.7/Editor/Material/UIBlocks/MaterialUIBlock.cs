@@ -95,7 +95,7 @@ namespace UnityEditor.Rendering.HighDefinition
             // because this enum will be used for ShaderGraph custom UI and we can't author layered
             // shader in shadergraph.
             ///<summary>User Bit 0</summary>
-            User0 = 1 << 11,
+            PGR = 1 << 11,
             ///<summary>User Bit 1</summary>
             User1 = 1 << 12,
             ///<summary>User Bit 2</summary>

@@ -61,7 +61,10 @@ TEXTURE2D(_TransmittanceColorMap);
 SAMPLER(sampler_TransmittanceColorMap);
 
 TEXTURE2D(_CoatMaskMap);
-SAMPLER(sampler_CoatMaskMap);
+SAMPLER(sampler_CoatMaskMap);        
+
+TEXTURE2D(_NPRAOMap);
+SAMPLER(sampler_NPRAOMap);
 
 #else
 
@@ -90,7 +93,8 @@ PROP_DECL_TEX2D(_HeightMap);
 
 PROP_DECL_TEX2D(_SubsurfaceMaskMap);
 PROP_DECL_TEX2D(_TransmissionMaskMap);
-PROP_DECL_TEX2D(_ThicknessMap);
+PROP_DECL_TEX2D(_ThicknessMap);         
+PROP_DECL_TEX2D(_NPRAOMap);
 
 TEXTURE2D(_LayerMaskMap);
 SAMPLER(sampler_LayerMaskMap);
@@ -144,7 +148,8 @@ float _SpecularAAScreenSpaceVariance;
 float _SpecularAAThreshold;
 
 // Raytracing
-float _RayTracing;
+float _RayTracing;                
+float _OutlineStrength;
 
 #ifndef LAYERED_LIT_SHADER
 

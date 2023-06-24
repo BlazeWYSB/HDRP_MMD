@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d8fafc2f7d308dc448d3f9140ec2b682
+guid: 7d332718938718042886f2cef3836168
 ShaderImporter:
   externalObjects: {}
   defaultTextures:
@@ -17,6 +17,8 @@ ShaderImporter:
   - unity_Lightmaps: {instanceID: 0}
   - unity_LightmapsInd: {instanceID: 0}
   - unity_ShadowMasks: {instanceID: 0}
+  - _LightmapMap: {instanceID: 0}
+  - _PBRMap: {instanceID: 0}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 
