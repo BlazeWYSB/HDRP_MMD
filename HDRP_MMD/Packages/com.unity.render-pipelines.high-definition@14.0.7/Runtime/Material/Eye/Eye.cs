@@ -86,6 +86,7 @@ namespace UnityEngine.Rendering.HighDefinition
         [GenerateHLSL(PackingRules.Exact, false, false, true, 1550)]
         public struct BSDFData
         {
+            public uint isDeferred;
             public uint materialFeatures;
 
             [SurfaceDataAttributes("", false, true)]

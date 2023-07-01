@@ -690,6 +690,8 @@ namespace UnityEngine.Rendering.HighDefinition
                         context.cmd.SetGlobalInteger(HDShaderIDs._LightLayersMaskBuffer4, (int)additionalMask);
                         context.cmd.SetGlobalInteger(HDShaderIDs._LightLayersMaskBuffer5, (int)ColorWriteMask.All);
 #endif
+                        DirectionalLightData currentLight = m_GpuLightsBuilder.directionalLights[0];
+                        context.cmd.SetGlobalVector(HDShaderIDs._CustomMainLightDirection, (currentLight.forward + Vector3.one) * 0.5f);
                         BindDBufferGlobalData(data.dBuffer, context);
                         DrawOpaqueRendererList(context, data.frameSettings, data.rendererList);
                     });

@@ -570,6 +570,14 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
             {
                 materialFeatureId = GBUFFER_LIT_SSS_NPR;
             }
+            else if (surfaceData.nprFeatures == 2)
+            {
+                materialFeatureId = GBUFFER_LIT_Face_NPR;
+            }   
+            else if (surfaceData.nprFeatures == 3)
+            {
+                materialFeatureId = GBUFFER_LIT_Hair_SSS;
+            }
         }
         else
             materialFeatureId = GBUFFER_LIT_TRANSMISSION;
@@ -595,6 +603,10 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
         if (surfaceData.nprFeatures == 1)
         {
             materialFeatureId = GBUFFER_LIT_ANISOTROPIC_NPR;
+        }      
+        else if (surfaceData.nprFeatures == 3)
+        {
+            materialFeatureId = GBUFFER_LIT_Hair_ANISOTROPIC;
         }
         // Reconstruct the default tangent frame.
         float3x3 frame = GetLocalFrame(surfaceData.normalWS);
@@ -660,6 +672,10 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
         {
             materialFeatureId = GBUFFER_LIT_IRIDESCENCE_NPR;
         }
+        else if (surfaceData.nprFeatures == 3)
+        {
+            materialFeatureId = GBUFFER_LIT_Hair_IRIDESCENCE;
+        }
         outGBuffer2.rgb = float3(surfaceData.iridescenceMask, surfaceData.iridescenceThickness,
                                  PackFloatInt8bit(surfaceData.metallic, 0, 8));
     }
@@ -673,6 +689,14 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
         if (surfaceData.nprFeatures == 1)
         {
             materialFeatureId = GBUFFER_LIT_NPR;
+        }
+        else if (surfaceData.nprFeatures == 2)
+        {
+            materialFeatureId = GBUFFER_LIT_Face_NPR;
+        }                                       
+        else if (surfaceData.nprFeatures == 3)
+        {
+            materialFeatureId = GBUFFER_LIT_Hair_NPR;
         }
         float3 diffuseColor = surfaceData.baseColor;
         float3 fresnel0 = surfaceData.specularColor;
@@ -738,7 +762,8 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
 //    OUT_GBUFFER_LIGHT_LAYERS = float4(0.0, 0.0, 0.0, (builtinData.renderingLayers & 0x000000FF) / 255.0);
 //#endif
                                         
-#ifdef _PGR                                                                        
+
+#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                                                                                         
     outGBuffer4 =  float4(surfaceData.ilmColor.rgb, surfaceData.matCapColor.r);         
 #endif                                    
 #ifdef SHADOWS_SHADOWMASK
@@ -764,7 +789,7 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     ZERO_INITIALIZE(BSDFData, bsdfData);
     // Note: Some properties of builtinData are not used, just init all at 0 to silent the compiler
     ZERO_INITIALIZE(BuiltinData, builtinData);
-                                              
+    bsdfData.isDeferred = 0;
     // Isolate material features.
     tileFeatureFlags &= MATERIAL_FEATURE_MASK_FLAGS;
 
@@ -806,20 +831,24 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     UnpackFloatInt8bit(inGBuffer2.a, 16, coatMask, materialFeatureId);
 
     uint pixelFeatureFlags = MATERIALFEATUREFLAGS_LIT_STANDARD; // Only sky/background do not have the Standard flag.
-    bool pixelHasSubsurface = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_SSS || materialFeatureId == GBUFFER_LIT_SSS_NPR;
-    bool pixelHasTransmission = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_TRANSMISSION;
-    bool pixelHasAnisotropy = materialFeatureId == GBUFFER_LIT_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR;
-    bool pixelHasIridescence = materialFeatureId == GBUFFER_LIT_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
+    bool pixelHasSubsurface = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_SSS || materialFeatureId == GBUFFER_LIT_SSS_NPR || materialFeatureId == GBUFFER_LIT_Face_NPR || materialFeatureId == GBUFFER_LIT_Hair_SSS;
+    bool pixelHasTransmission = materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_TRANSMISSION;// || materialFeatureId == GBUFFER_LIT_Face_NPR || materialFeatureId == GBUFFER_LIT_Hair_SSS;
+    bool pixelHasAnisotropy = materialFeatureId == GBUFFER_LIT_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_Hair_ANISOTROPIC;
+    bool pixelHasIridescence = materialFeatureId == GBUFFER_LIT_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR || materialFeatureId == GBUFFER_LIT_Hair_IRIDESCENCE;
     bool pixelHasClearCoat = coatMask > 0.0;
     bool pixelHasNRP = materialFeatureId == GBUFFER_LIT_NPR || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_SSS_NPR || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
+    bool pixelHasNRPFace = materialFeatureId == GBUFFER_LIT_Face_NPR;                                                                                                                                                   
+    bool pixelHasNRPHair = materialFeatureId == GBUFFER_LIT_Hair_NPR || materialFeatureId == GBUFFER_LIT_Hair_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_Hair_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_Hair_SSS;
+                                        
     // Disable pixel features disabled by the tile.
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasSubsurface ? MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING : 0);
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasTransmission ? MATERIALFEATUREFLAGS_LIT_TRANSMISSION : 0);
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasAnisotropy ? MATERIALFEATUREFLAGS_LIT_ANISOTROPY : 0);
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasIridescence ? MATERIALFEATUREFLAGS_LIT_IRIDESCENCE : 0);
     pixelFeatureFlags |= tileFeatureFlags & (pixelHasClearCoat ? MATERIALFEATUREFLAGS_LIT_CLEAR_COAT : 0);
-    pixelFeatureFlags |= tileFeatureFlags & (pixelHasNRP ? MATERIALFEATUREFLAGS_LIT_NPR : 0);
-
+    pixelFeatureFlags |= tileFeatureFlags & (pixelHasNRP ? MATERIALFEATUREFLAGS_LIT_NPR : 0);                        
+    pixelFeatureFlags |= tileFeatureFlags & (pixelHasNRPFace ? MATERIALFEATUREFLAGS_LIT_NPRFACE : 0);
+    pixelFeatureFlags |= tileFeatureFlags & (pixelHasNRPHair ? MATERIALFEATUREFLAGS_LIT_NPRHAIR : 0);
     // In the case of material classification we assign tileFeatureFlags to bsdfData.materialFeatures
     // This mean that the branch inside the tile will be the same (coherency). Remember that a divergent branch
     // on AMD GCN mean we will execute both branch for all fragement. We setup at pixel level values
@@ -836,15 +865,15 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     // because there is more likelihood to save performance (excep in the very rare case of catch all of material classification).
     // We can indeed have divergence inside a tile (like having aniso and not aniso)
     // but it is more likely that the whole time is convergent (like everything have SSS and clear coat).
-    if (tileFeatureFlags == MATERIAL_FEATURE_MASK_FLAGS)
-    {
-        bsdfData.materialFeatures = pixelFeatureFlags;
-        tileFeatureFlags = pixelFeatureFlags; // Required for the aniso test (see below)
-    }
-    else
-    {
-        bsdfData.materialFeatures = tileFeatureFlags;
-    }
+    //if (tileFeatureFlags == MATERIAL_FEATURE_MASK_FLAGS)
+    //{
+    //    bsdfData.materialFeatures = pixelFeatureFlags;
+    //    tileFeatureFlags = pixelFeatureFlags; // Required for the aniso test (see below)
+    //}
+    //else
+    //{
+    bsdfData.materialFeatures = pixelFeatureFlags;
+    //}           
 
     // Decompress feature-agnostic data from the G-Buffer.
     float3 baseColor = inGBuffer0.rgb;
@@ -1443,6 +1472,12 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
         diffTerm *= lerp(1, 1.0 - coatF, bsdfData.coatMask);
     }
 
+    if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR) || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR)
+                                                                        || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE))
+    {                                                                   
+        clampedNdotL = bsdfData.ilmColor.g;   
+        flippedNdotL = 1- clampedNdotL;                
+    }
     // The compiler should optimize these. Can revisit later if necessary.
     cbsdf.diffR = diffTerm * clampedNdotL;
     cbsdf.diffT = diffTerm * flippedNdotL;
@@ -1451,7 +1486,21 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
     // This branch will be optimized away if there's no transmission.
     if (NdotL > 0)
     {
-        cbsdf.specR = specTerm * clampedNdotL;
+        cbsdf.specR = specTerm * clampedNdotL;             
+        if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR))
+        {       
+            float fernselSPec= max(0.01,pow(NdotH,3));
+            cbsdf.specR += step(1 - bsdfData.ilmColor.r, fernselSPec) * bsdfData.diffuseColor * bsdfData.ilmColor.b * clampedNdotL * 0.6;   
+        }       
+        else if (HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR) )
+        {                                                                                                                                     
+            float fernselSPec = 1 - max(0.01,pow(NdotH,5));                                                                                      
+            cbsdf.specR += step(1 - bsdfData.ilmColor.r, fernselSPec) * bsdfData.diffuseColor * bsdfData.ilmColor.b * clampedNdotL;  
+        }         
+        else if (HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE) )
+        {                                                                                                                                       
+            cbsdf.specR =0;  
+        }
     }
 
     // We don't multiply by 'bsdfData.diffuseColor' here. It's done only once in PostEvaluateBSDF().
@@ -2151,7 +2200,8 @@ void PostEvaluateBSDF(  LightLoopContext lightLoopContext,
     // Apply the albedo to the direct diffuse lighting (only once). The indirect (baked)
     // diffuse lighting has already multiply the albedo in ModifyBakedDiffuseLighting().
     // Note: In deferred bakeDiffuseLighting also contain emissive and in this case emissiveColor is 0
-    lightLoopOutput.diffuseLighting = modifiedDiffuseColor * lighting.direct.diffuse + builtinData.bakeDiffuseLighting + builtinData.emissiveColor;
+    lightLoopOutput.diffuseLighting = modifiedDiffuseColor * lighting.direct.diffuse + builtinData.bakeDiffuseLighting + builtinData.emissiveColor;     
+     
 
     // If refraction is enable we use the transmittanceMask to lerp between current diffuse lighting and refraction value
     // Physically speaking, transmittanceMask should be 1, but for artistic reasons, we let the value vary

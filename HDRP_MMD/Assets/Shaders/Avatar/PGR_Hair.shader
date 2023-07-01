@@ -1,4 +1,4 @@
-Shader "Blaze/PGR_PBR"
+Shader "Blaze/PGR_Hair"
 {
     Properties
     {
@@ -265,7 +265,7 @@ Shader "Blaze/PGR_PBR"
     #pragma shader_feature_local_raytracing _ENABLESPECULAROCCLUSION
     #pragma shader_feature_local_raytracing _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     
-    #define _PGR
+    #define _PGR_Hair
     #ifdef _ENABLESPECULAROCCLUSION
     #define _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #endif

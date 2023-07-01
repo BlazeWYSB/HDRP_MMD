@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2686e09ec7aef44bad2843e4416f057, type: 3}
-  m_Name: BambooLeaves
+  m_Name: Hair
   m_EditorClassIdentifier: 
   profile:
-    scatteringDistance: {r: 0.5152035, g: 0.1313348, b: 0.07290197, a: 1}
-    scatteringDistanceMultiplier: 4.61
+    scatteringDistance: {r: 0.1465848, g: 0.023153365, b: 0.39157256, a: 1}
+    scatteringDistanceMultiplier: 6.57
     transmissionTint: {r: 1, g: 1, b: 1, a: 1}
     texturingMode: 0
     transmissionMode: 1
-    thicknessRemap: {x: 0, y: 8.387555}
-    worldScale: 1
+    thicknessRemap: {x: 0, y: 5.250705}
+    worldScale: 1.03
     ior: 2
-    hash: 1082089202
+    hash: 1076733569
   m_Version: 2

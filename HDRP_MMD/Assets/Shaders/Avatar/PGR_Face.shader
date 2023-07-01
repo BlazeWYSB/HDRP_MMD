@@ -1,4 +1,4 @@
-Shader "Blaze/PGR_PBR"
+Shader "Blaze/PGR_Face"
 {
     Properties
     {
@@ -10,6 +10,8 @@ Shader "Blaze/PGR_PBR"
         [MainTexture] _BaseColorMap("BaseColorMap", 2D) = "white" {}
         [HideInInspector] _BaseColorMap_MipInfo("_BaseColorMap_MipInfo", Vector) = (0, 0, 0, 0)
         [NoScaleOffset]_NPRAOMap("NPR AO Map", 2D) = "white" {}
+        _SDFFront("_SDFFront", Vector) = (1, 0, 0, 0)
+        _SDFRight("_SDFRight", Vector) = (0, 1, 0, 0)
         //_CustomMainLightDirection("NPR Light Direction", Vector) = (1, 0, 0, 0)
 
         _Metallic("_Metallic", Range(0.0, 1.0)) = 0
@@ -265,7 +267,7 @@ Shader "Blaze/PGR_PBR"
     #pragma shader_feature_local_raytracing _ENABLESPECULAROCCLUSION
     #pragma shader_feature_local_raytracing _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     
-    #define _PGR
+    #define _PGR_Face
     #ifdef _ENABLESPECULAROCCLUSION
     #define _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #endif

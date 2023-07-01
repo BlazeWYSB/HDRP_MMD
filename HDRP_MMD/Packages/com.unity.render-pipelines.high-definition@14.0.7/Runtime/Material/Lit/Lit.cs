@@ -126,6 +126,7 @@ namespace UnityEngine.Rendering.HighDefinition
         public struct BSDFData
         {
             public uint materialFeatures;
+            public uint isDeferred;
 
             [SurfaceDataAttributes("", false, true, FieldPrecision.Real)]
             public Vector3 diffuseColor;

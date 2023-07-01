@@ -168,6 +168,7 @@ void SHADE_OPAQUE_ENTRY(uint3 dispatchThreadId : SV_DispatchThreadID, uint2 grou
     PreLightData preLightData = GetPreLightData(V, posInput, bsdfData);
 
     LightLoopOutput lightLoopOutput;
+    bsdfData.isDeferred = 1;
     LightLoop(V, posInput, preLightData, bsdfData, builtinData, featureFlags, lightLoopOutput);
 
     // Alias

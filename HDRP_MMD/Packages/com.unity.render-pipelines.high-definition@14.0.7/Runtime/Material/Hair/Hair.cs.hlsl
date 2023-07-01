@@ -5,6 +5,57 @@
 #ifndef HAIR_CS_HLSL
 #define HAIR_CS_HLSL
 //
+// UnityEngine.Rendering.HighDefinition.Hair+MaterialFeatureFlags:  static fields
+//
+#define MATERIALFEATUREFLAGS_HAIR_KAJIYA_KAY (1)
+#define MATERIALFEATUREFLAGS_HAIR_MARSCHNER (2)
+
+//
+// UnityEngine.Rendering.HighDefinition.Hair+BSDFData:  static fields
+//
+#define DEBUGVIEW_HAIR_BSDFDATA_IS_DEFERRED (1450)
+#define DEBUGVIEW_HAIR_BSDFDATA_MATERIAL_FEATURES (1451)
+#define DEBUGVIEW_HAIR_BSDFDATA_AMBIENT_OCCLUSION (1452)
+#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_OCCLUSION (1453)
+#define DEBUGVIEW_HAIR_BSDFDATA_DIFFUSE_COLOR (1454)
+#define DEBUGVIEW_HAIR_BSDFDATA_FRESNEL0 (1455)
+#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_TINT (1456)
+#define DEBUGVIEW_HAIR_BSDFDATA_NORMAL_WS (1457)
+#define DEBUGVIEW_HAIR_BSDFDATA_NORMAL_VIEW_SPACE (1458)
+#define DEBUGVIEW_HAIR_BSDFDATA_GEOMETRIC_NORMAL (1459)
+#define DEBUGVIEW_HAIR_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1460)
+#define DEBUGVIEW_HAIR_BSDFDATA_PERCEPTUAL_ROUGHNESS (1461)
+#define DEBUGVIEW_HAIR_BSDFDATA_TRANSMITTANCE (1462)
+#define DEBUGVIEW_HAIR_BSDFDATA_RIM_TRANSMISSION_INTENSITY (1463)
+#define DEBUGVIEW_HAIR_BSDFDATA_HAIR_STRAND_DIRECTION_WS (1464)
+#define DEBUGVIEW_HAIR_BSDFDATA_ANISOTROPY (1465)
+#define DEBUGVIEW_HAIR_BSDFDATA_TANGENT_WS (1466)
+#define DEBUGVIEW_HAIR_BSDFDATA_BITANGENT_WS (1467)
+#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_T (1468)
+#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_B (1469)
+#define DEBUGVIEW_HAIR_BSDFDATA_H (1470)
+#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_PERCEPTUAL_ROUGHNESS (1471)
+#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_TINT (1472)
+#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_EXPONENT (1473)
+#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_EXPONENT (1474)
+#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_SHIFT (1475)
+#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_SHIFT (1476)
+#define DEBUGVIEW_HAIR_BSDFDATA_ABSORPTION (1477)
+#define DEBUGVIEW_HAIR_BSDFDATA_LIGHT_PATH_LENGTH (1478)
+#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE (1479)
+#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_R (1480)
+#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_TT (1481)
+#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_TRT (1482)
+#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_R (1483)
+#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_TT (1484)
+#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_TRT (1485)
+#define DEBUGVIEW_HAIR_BSDFDATA_PERCEPTUAL_ROUGHNESS_RADIAL (1486)
+#define DEBUGVIEW_HAIR_BSDFDATA_DISTRIBUTION_NORMALIZATION_FACTOR (1487)
+#define DEBUGVIEW_HAIR_BSDFDATA_STRAND_COUNT_PROBE (1488)
+#define DEBUGVIEW_HAIR_BSDFDATA_STRAND_SHADOW_BIAS (1489)
+#define DEBUGVIEW_HAIR_BSDFDATA_SPLINE_VISIBILITY (1490)
+
+//
 // UnityEngine.Rendering.HighDefinition.Hair+SurfaceData:  static fields
 //
 #define DEBUGVIEW_HAIR_SURFACEDATA_MATERIAL_FEATURES (1400)
@@ -32,88 +83,11 @@
 #define DEBUGVIEW_HAIR_SURFACEDATA_STRAND_COUNT_PROBE (1422)
 #define DEBUGVIEW_HAIR_SURFACEDATA_STRAND_SHADOW_BIAS (1423)
 
-//
-// UnityEngine.Rendering.HighDefinition.Hair+MaterialFeatureFlags:  static fields
-//
-#define MATERIALFEATUREFLAGS_HAIR_KAJIYA_KAY (1)
-#define MATERIALFEATUREFLAGS_HAIR_MARSCHNER (2)
-
-//
-// UnityEngine.Rendering.HighDefinition.Hair+BSDFData:  static fields
-//
-#define DEBUGVIEW_HAIR_BSDFDATA_MATERIAL_FEATURES (1450)
-#define DEBUGVIEW_HAIR_BSDFDATA_AMBIENT_OCCLUSION (1451)
-#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_OCCLUSION (1452)
-#define DEBUGVIEW_HAIR_BSDFDATA_DIFFUSE_COLOR (1453)
-#define DEBUGVIEW_HAIR_BSDFDATA_FRESNEL0 (1454)
-#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_TINT (1455)
-#define DEBUGVIEW_HAIR_BSDFDATA_NORMAL_WS (1456)
-#define DEBUGVIEW_HAIR_BSDFDATA_NORMAL_VIEW_SPACE (1457)
-#define DEBUGVIEW_HAIR_BSDFDATA_GEOMETRIC_NORMAL (1458)
-#define DEBUGVIEW_HAIR_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1459)
-#define DEBUGVIEW_HAIR_BSDFDATA_PERCEPTUAL_ROUGHNESS (1460)
-#define DEBUGVIEW_HAIR_BSDFDATA_TRANSMITTANCE (1461)
-#define DEBUGVIEW_HAIR_BSDFDATA_RIM_TRANSMISSION_INTENSITY (1462)
-#define DEBUGVIEW_HAIR_BSDFDATA_HAIR_STRAND_DIRECTION_WS (1463)
-#define DEBUGVIEW_HAIR_BSDFDATA_ANISOTROPY (1464)
-#define DEBUGVIEW_HAIR_BSDFDATA_TANGENT_WS (1465)
-#define DEBUGVIEW_HAIR_BSDFDATA_BITANGENT_WS (1466)
-#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_T (1467)
-#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_B (1468)
-#define DEBUGVIEW_HAIR_BSDFDATA_H (1469)
-#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_PERCEPTUAL_ROUGHNESS (1470)
-#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_TINT (1471)
-#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_EXPONENT (1472)
-#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_EXPONENT (1473)
-#define DEBUGVIEW_HAIR_BSDFDATA_SPECULAR_SHIFT (1474)
-#define DEBUGVIEW_HAIR_BSDFDATA_SECONDARY_SPECULAR_SHIFT (1475)
-#define DEBUGVIEW_HAIR_BSDFDATA_ABSORPTION (1476)
-#define DEBUGVIEW_HAIR_BSDFDATA_LIGHT_PATH_LENGTH (1477)
-#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE (1478)
-#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_R (1479)
-#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_TT (1480)
-#define DEBUGVIEW_HAIR_BSDFDATA_CUTICLE_ANGLE_TRT (1481)
-#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_R (1482)
-#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_TT (1483)
-#define DEBUGVIEW_HAIR_BSDFDATA_ROUGHNESS_TRT (1484)
-#define DEBUGVIEW_HAIR_BSDFDATA_PERCEPTUAL_ROUGHNESS_RADIAL (1485)
-#define DEBUGVIEW_HAIR_BSDFDATA_DISTRIBUTION_NORMALIZATION_FACTOR (1486)
-#define DEBUGVIEW_HAIR_BSDFDATA_STRAND_COUNT_PROBE (1487)
-#define DEBUGVIEW_HAIR_BSDFDATA_STRAND_SHADOW_BIAS (1488)
-#define DEBUGVIEW_HAIR_BSDFDATA_SPLINE_VISIBILITY (1489)
-
-// Generated from UnityEngine.Rendering.HighDefinition.Hair+SurfaceData
-// PackingRules = Exact
-struct SurfaceData
-{
-    uint materialFeatures;
-    float ambientOcclusion;
-    float3 diffuseColor;
-    float specularOcclusion;
-    float3 normalWS;
-    float3 geomNormalWS;
-    float perceptualSmoothness;
-    float3 transmittance;
-    float rimTransmissionIntensity;
-    float3 hairStrandDirectionWS;
-    float secondaryPerceptualSmoothness;
-    float3 specularTint;
-    float3 secondarySpecularTint;
-    float specularShift;
-    float secondarySpecularShift;
-    float3 absorption;
-    float eumelanin;
-    float pheomelanin;
-    float perceptualRadialSmoothness;
-    float cuticleAngle;
-    float4 strandCountProbe;
-    float strandShadowBias;
-};
-
 // Generated from UnityEngine.Rendering.HighDefinition.Hair+BSDFData
 // PackingRules = Exact
 struct BSDFData
 {
+    uint isDeferred;
     uint materialFeatures;
     float ambientOcclusion;
     float specularOcclusion;
@@ -154,90 +128,33 @@ struct BSDFData
     float splineVisibility;
 };
 
-//
-// Debug functions
-//
-void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout float3 result, inout bool needLinearToSRGB)
+// Generated from UnityEngine.Rendering.HighDefinition.Hair+SurfaceData
+// PackingRules = Exact
+struct SurfaceData
 {
-    switch (paramId)
-    {
-        case DEBUGVIEW_HAIR_SURFACEDATA_MATERIAL_FEATURES:
-            result = GetIndexColor(surfacedata.materialFeatures);
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_AMBIENT_OCCLUSION:
-            result = surfacedata.ambientOcclusion.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_DIFFUSE:
-            result = surfacedata.diffuseColor;
-            needLinearToSRGB = true;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_OCCLUSION:
-            result = surfacedata.specularOcclusion.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_NORMAL:
-            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_NORMAL_VIEW_SPACE:
-            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_GEOMETRIC_NORMAL:
-            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
-            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SMOOTHNESS:
-            result = surfacedata.perceptualSmoothness.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_TRANSMITTANCE:
-            result = surfacedata.transmittance;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_RIM_TRANSMISSION_INTENSITY:
-            result = surfacedata.rimTransmissionIntensity.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_HAIR_STRAND_DIRECTION:
-            result = surfacedata.hairStrandDirectionWS * 0.5 + 0.5;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SMOOTHNESS:
-            result = surfacedata.secondaryPerceptualSmoothness.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_TINT:
-            result = surfacedata.specularTint;
-            needLinearToSRGB = true;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SPECULAR_TINT:
-            result = surfacedata.secondarySpecularTint;
-            needLinearToSRGB = true;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_SHIFT:
-            result = surfacedata.specularShift.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SPECULAR_SHIFT:
-            result = surfacedata.secondarySpecularShift.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_ABSORPTION_COEFFICIENT:
-            result = surfacedata.absorption;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_EUMELANIN:
-            result = surfacedata.eumelanin.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_PHEOMELANIN:
-            result = surfacedata.pheomelanin.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_AZIMUTHAL_ROUGHNESS:
-            result = surfacedata.perceptualRadialSmoothness.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_CUTICLE_ANGLE:
-            result = surfacedata.cuticleAngle.xxx;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_STRAND_COUNT_PROBE:
-            result = surfacedata.strandCountProbe.xyz;
-            break;
-        case DEBUGVIEW_HAIR_SURFACEDATA_STRAND_SHADOW_BIAS:
-            result = surfacedata.strandShadowBias.xxx;
-            break;
-    }
-}
+    uint materialFeatures;
+    float ambientOcclusion;
+    float3 diffuseColor;
+    float specularOcclusion;
+    float3 normalWS;
+    float3 geomNormalWS;
+    float perceptualSmoothness;
+    float3 transmittance;
+    float rimTransmissionIntensity;
+    float3 hairStrandDirectionWS;
+    float secondaryPerceptualSmoothness;
+    float3 specularTint;
+    float3 secondarySpecularTint;
+    float specularShift;
+    float secondarySpecularShift;
+    float3 absorption;
+    float eumelanin;
+    float pheomelanin;
+    float perceptualRadialSmoothness;
+    float cuticleAngle;
+    float4 strandCountProbe;
+    float strandShadowBias;
+};
 
 //
 // Debug functions
@@ -246,6 +163,9 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
 {
     switch (paramId)
     {
+        case DEBUGVIEW_HAIR_BSDFDATA_IS_DEFERRED:
+            result = GetIndexColor(bsdfdata.isDeferred);
+            break;
         case DEBUGVIEW_HAIR_BSDFDATA_MATERIAL_FEATURES:
             result = GetIndexColor(bsdfdata.materialFeatures);
             break;
@@ -366,6 +286,91 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
             break;
         case DEBUGVIEW_HAIR_BSDFDATA_SPLINE_VISIBILITY:
             result = bsdfdata.splineVisibility.xxx;
+            break;
+    }
+}
+
+//
+// Debug functions
+//
+void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout float3 result, inout bool needLinearToSRGB)
+{
+    switch (paramId)
+    {
+        case DEBUGVIEW_HAIR_SURFACEDATA_MATERIAL_FEATURES:
+            result = GetIndexColor(surfacedata.materialFeatures);
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_AMBIENT_OCCLUSION:
+            result = surfacedata.ambientOcclusion.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_DIFFUSE:
+            result = surfacedata.diffuseColor;
+            needLinearToSRGB = true;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_OCCLUSION:
+            result = surfacedata.specularOcclusion.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_NORMAL:
+            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_NORMAL_VIEW_SPACE:
+            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_GEOMETRIC_NORMAL:
+            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
+            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SMOOTHNESS:
+            result = surfacedata.perceptualSmoothness.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_TRANSMITTANCE:
+            result = surfacedata.transmittance;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_RIM_TRANSMISSION_INTENSITY:
+            result = surfacedata.rimTransmissionIntensity.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_HAIR_STRAND_DIRECTION:
+            result = surfacedata.hairStrandDirectionWS * 0.5 + 0.5;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SMOOTHNESS:
+            result = surfacedata.secondaryPerceptualSmoothness.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_TINT:
+            result = surfacedata.specularTint;
+            needLinearToSRGB = true;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SPECULAR_TINT:
+            result = surfacedata.secondarySpecularTint;
+            needLinearToSRGB = true;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SPECULAR_SHIFT:
+            result = surfacedata.specularShift.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_SECONDARY_SPECULAR_SHIFT:
+            result = surfacedata.secondarySpecularShift.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_ABSORPTION_COEFFICIENT:
+            result = surfacedata.absorption;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_EUMELANIN:
+            result = surfacedata.eumelanin.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_PHEOMELANIN:
+            result = surfacedata.pheomelanin.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_AZIMUTHAL_ROUGHNESS:
+            result = surfacedata.perceptualRadialSmoothness.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_CUTICLE_ANGLE:
+            result = surfacedata.cuticleAngle.xxx;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_STRAND_COUNT_PROBE:
+            result = surfacedata.strandCountProbe.xyz;
+            break;
+        case DEBUGVIEW_HAIR_SURFACEDATA_STRAND_SHADOW_BIAS:
+            result = surfacedata.strandShadowBias.xxx;
             break;
     }
 }

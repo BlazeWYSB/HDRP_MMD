@@ -39,6 +39,26 @@ CBUFFER_START(ShaderVariablesWaterRendering)
     int _CameraInUnderwaterRegion;
 CBUFFER_END
 
+// Generated from UnityEngine.Rendering.HighDefinition.WaterSurfaceProfile
+// PackingRules = Exact
+struct WaterSurfaceProfile
+{
+    float3 waterAmbientProbe;
+    float tipScatteringHeight;
+    float bodyScatteringHeight;
+    float maxRefractionDistance;
+    uint lightLayers;
+    int cameraUnderWater;
+    float3 transparencyColor;
+    float outScatteringCoefficient;
+    float3 scatteringColor;
+    float envPerceptualRoughness;
+    float smoothnessFadeStart;
+    float smoothnessFadeDistance;
+    float roughnessEndValue;
+    float padding;
+};
+
 // Generated from UnityEngine.Rendering.HighDefinition.ShaderVariablesWater
 // PackingRules = Exact
 CBUFFER_START(ShaderVariablesWater)
@@ -88,26 +108,6 @@ CBUFFER_START(ShaderVariablesWater)
     float _AmbientScattering;
     int _CausticsBandIndex;
 CBUFFER_END
-
-// Generated from UnityEngine.Rendering.HighDefinition.WaterSurfaceProfile
-// PackingRules = Exact
-struct WaterSurfaceProfile
-{
-    float3 waterAmbientProbe;
-    float tipScatteringHeight;
-    float bodyScatteringHeight;
-    float maxRefractionDistance;
-    uint lightLayers;
-    int cameraUnderWater;
-    float3 transparencyColor;
-    float outScatteringCoefficient;
-    float3 scatteringColor;
-    float envPerceptualRoughness;
-    float smoothnessFadeStart;
-    float smoothnessFadeDistance;
-    float roughnessEndValue;
-    float padding;
-};
 
 
 #endif

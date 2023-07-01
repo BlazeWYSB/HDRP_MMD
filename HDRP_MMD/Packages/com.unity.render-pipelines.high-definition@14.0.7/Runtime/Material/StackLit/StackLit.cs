@@ -200,6 +200,7 @@ namespace UnityEngine.Rendering.HighDefinition
         public struct BSDFData
         {
             public uint materialFeatures;
+            public uint isDeferred;
 
             // Bottom interface (2 lobes BSDF)
             // Standard parametrization

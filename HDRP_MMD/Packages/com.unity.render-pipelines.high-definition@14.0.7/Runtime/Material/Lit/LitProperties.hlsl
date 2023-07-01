@@ -120,6 +120,8 @@ float _PPDMinSamples;
 float _PPDLodThreshold;
 
 float3 _EmissiveColor;
+float3 _SDFFront;                            
+float3 _SDFRight;
 float _AlbedoAffectEmissive;
 float _EmissiveExposureWeight;
 
@@ -128,7 +130,7 @@ int  _SpecularOcclusionMode;
 // Transparency
 float3 _TransmittanceColor;
 float _Ior;
-float _ATDistance;
+float _ATDistance;                 
 
 // Caution: C# code in BaseLitUI.cs call LightmapEmissionFlagsProperty() which assume that there is an existing "_EmissionColor"
 // value that exist to identify if the GI emission need to be enabled.
@@ -138,7 +140,7 @@ float3 _EmissionColor;
 float4 _EmissiveColorMap_ST;
 float _TexWorldScaleEmissive;
 float4 _UVMappingMaskEmissive;
-float _ObjectSpaceUVMappingEmissive;
+float _ObjectSpaceUVMappingEmissive;          
 
 float4 _InvPrimScale; // Only XY are used
 
@@ -290,16 +292,17 @@ float _TessellationFactorTriangleSize;
 float _TessellationShapeFactor;
 float _TessellationBackFaceCullEpsilon;
 float _TessellationObjectScale;
-float _TessellationTilingScale;
+float _TessellationTilingScale;   
 #endif
 
 CBUFFER_END
 
 // Following three variables are feeded by the C++ Editor for Scene selection
 // It need to be outside the UnityPerMaterial buffer to have Material compatible with SRP Batcher
-int _ObjectId;
-int _PassValue;
-float4 _SelectionID;
+int _ObjectId;                     
+int _PassValue;                          
+float4 _SelectionID;                                                                             
+float4 _CustomMainLightDirection;
 
 #if defined(UNITY_DOTS_INSTANCING_ENABLED)
 #if defined(LAYERED_LIT_SHADER)

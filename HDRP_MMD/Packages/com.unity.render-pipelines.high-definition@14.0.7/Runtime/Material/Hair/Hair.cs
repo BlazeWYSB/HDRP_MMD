@@ -101,6 +101,7 @@ namespace UnityEngine.Rendering.HighDefinition
         [GenerateHLSL(PackingRules.Exact, false, false, true, 1450)]
         public struct BSDFData
         {
+            public uint isDeferred;
             public uint materialFeatures;
 
             public float ambientOcclusion;

@@ -12,30 +12,6 @@
 #define MATERIALFEATUREFLAGS_FABRIC_TRANSMISSION (4)
 
 //
-// UnityEngine.Rendering.HighDefinition.Fabric+BSDFData:  static fields
-//
-#define DEBUGVIEW_FABRIC_BSDFDATA_MATERIAL_FEATURES (1350)
-#define DEBUGVIEW_FABRIC_BSDFDATA_DIFFUSE_COLOR (1351)
-#define DEBUGVIEW_FABRIC_BSDFDATA_FRESNEL0 (1352)
-#define DEBUGVIEW_FABRIC_BSDFDATA_AMBIENT_OCCLUSION (1353)
-#define DEBUGVIEW_FABRIC_BSDFDATA_SPECULAR_OCCLUSION (1354)
-#define DEBUGVIEW_FABRIC_BSDFDATA_NORMAL_WS (1355)
-#define DEBUGVIEW_FABRIC_BSDFDATA_NORMAL_VIEW_SPACE (1356)
-#define DEBUGVIEW_FABRIC_BSDFDATA_GEOMETRIC_NORMAL (1357)
-#define DEBUGVIEW_FABRIC_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1358)
-#define DEBUGVIEW_FABRIC_BSDFDATA_PERCEPTUAL_ROUGHNESS (1359)
-#define DEBUGVIEW_FABRIC_BSDFDATA_DIFFUSION_PROFILE_INDEX (1360)
-#define DEBUGVIEW_FABRIC_BSDFDATA_SUBSURFACE_MASK (1361)
-#define DEBUGVIEW_FABRIC_BSDFDATA_THICKNESS (1362)
-#define DEBUGVIEW_FABRIC_BSDFDATA_USE_THICK_OBJECT_MODE (1363)
-#define DEBUGVIEW_FABRIC_BSDFDATA_TRANSMITTANCE (1364)
-#define DEBUGVIEW_FABRIC_BSDFDATA_TANGENT_WS (1365)
-#define DEBUGVIEW_FABRIC_BSDFDATA_BITANGENT_WS (1366)
-#define DEBUGVIEW_FABRIC_BSDFDATA_ROUGHNESS_T (1367)
-#define DEBUGVIEW_FABRIC_BSDFDATA_ROUGHNESS_B (1368)
-#define DEBUGVIEW_FABRIC_BSDFDATA_ANISOTROPY (1369)
-
-//
 // UnityEngine.Rendering.HighDefinition.Fabric+SurfaceData:  static fields
 //
 #define DEBUGVIEW_FABRIC_SURFACEDATA_MATERIAL_FEATURES (1300)
@@ -55,29 +31,30 @@
 #define DEBUGVIEW_FABRIC_SURFACEDATA_TANGENT (1314)
 #define DEBUGVIEW_FABRIC_SURFACEDATA_ANISOTROPY (1315)
 
-// Generated from UnityEngine.Rendering.HighDefinition.Fabric+BSDFData
-// PackingRules = Exact
-struct BSDFData
-{
-    uint materialFeatures;
-    float3 diffuseColor;
-    float3 fresnel0;
-    float ambientOcclusion;
-    float specularOcclusion;
-    float3 normalWS;
-    float3 geomNormalWS;
-    float perceptualRoughness;
-    uint diffusionProfileIndex;
-    float subsurfaceMask;
-    float thickness;
-    bool useThickObjectMode;
-    float3 transmittance;
-    float3 tangentWS;
-    float3 bitangentWS;
-    float roughnessT;
-    float roughnessB;
-    float anisotropy;
-};
+//
+// UnityEngine.Rendering.HighDefinition.Fabric+BSDFData:  static fields
+//
+#define DEBUGVIEW_FABRIC_BSDFDATA_IS_DEFERRED (1350)
+#define DEBUGVIEW_FABRIC_BSDFDATA_MATERIAL_FEATURES (1351)
+#define DEBUGVIEW_FABRIC_BSDFDATA_DIFFUSE_COLOR (1352)
+#define DEBUGVIEW_FABRIC_BSDFDATA_FRESNEL0 (1353)
+#define DEBUGVIEW_FABRIC_BSDFDATA_AMBIENT_OCCLUSION (1354)
+#define DEBUGVIEW_FABRIC_BSDFDATA_SPECULAR_OCCLUSION (1355)
+#define DEBUGVIEW_FABRIC_BSDFDATA_NORMAL_WS (1356)
+#define DEBUGVIEW_FABRIC_BSDFDATA_NORMAL_VIEW_SPACE (1357)
+#define DEBUGVIEW_FABRIC_BSDFDATA_GEOMETRIC_NORMAL (1358)
+#define DEBUGVIEW_FABRIC_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1359)
+#define DEBUGVIEW_FABRIC_BSDFDATA_PERCEPTUAL_ROUGHNESS (1360)
+#define DEBUGVIEW_FABRIC_BSDFDATA_DIFFUSION_PROFILE_INDEX (1361)
+#define DEBUGVIEW_FABRIC_BSDFDATA_SUBSURFACE_MASK (1362)
+#define DEBUGVIEW_FABRIC_BSDFDATA_THICKNESS (1363)
+#define DEBUGVIEW_FABRIC_BSDFDATA_USE_THICK_OBJECT_MODE (1364)
+#define DEBUGVIEW_FABRIC_BSDFDATA_TRANSMITTANCE (1365)
+#define DEBUGVIEW_FABRIC_BSDFDATA_TANGENT_WS (1366)
+#define DEBUGVIEW_FABRIC_BSDFDATA_BITANGENT_WS (1367)
+#define DEBUGVIEW_FABRIC_BSDFDATA_ROUGHNESS_T (1368)
+#define DEBUGVIEW_FABRIC_BSDFDATA_ROUGHNESS_B (1369)
+#define DEBUGVIEW_FABRIC_BSDFDATA_ANISOTROPY (1370)
 
 // Generated from UnityEngine.Rendering.HighDefinition.Fabric+SurfaceData
 // PackingRules = Exact
@@ -99,6 +76,91 @@ struct SurfaceData
     float anisotropy;
 };
 
+// Generated from UnityEngine.Rendering.HighDefinition.Fabric+BSDFData
+// PackingRules = Exact
+struct BSDFData
+{
+    uint isDeferred;
+    uint materialFeatures;
+    float3 diffuseColor;
+    float3 fresnel0;
+    float ambientOcclusion;
+    float specularOcclusion;
+    float3 normalWS;
+    float3 geomNormalWS;
+    float perceptualRoughness;
+    uint diffusionProfileIndex;
+    float subsurfaceMask;
+    float thickness;
+    bool useThickObjectMode;
+    float3 transmittance;
+    float3 tangentWS;
+    float3 bitangentWS;
+    float roughnessT;
+    float roughnessB;
+    float anisotropy;
+};
+
+//
+// Debug functions
+//
+void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout float3 result, inout bool needLinearToSRGB)
+{
+    switch (paramId)
+    {
+        case DEBUGVIEW_FABRIC_SURFACEDATA_MATERIAL_FEATURES:
+            result = GetIndexColor(surfacedata.materialFeatures);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_BASE_COLOR:
+            result = surfacedata.baseColor;
+            needLinearToSRGB = true;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_SPECULAR_OCCLUSION:
+            result = surfacedata.specularOcclusion.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_NORMAL:
+            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_NORMAL_VIEW_SPACE:
+            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_GEOMETRIC_NORMAL:
+            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
+            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_SMOOTHNESS:
+            result = surfacedata.perceptualSmoothness.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_AMBIENT_OCCLUSION:
+            result = surfacedata.ambientOcclusion.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_SPECULAR_TINT:
+            result = surfacedata.specularColor;
+            needLinearToSRGB = true;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_DIFFUSION_PROFILE_HASH:
+            result = GetIndexColor(surfacedata.diffusionProfileHash);
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_SUBSURFACE_MASK:
+            result = surfacedata.subsurfaceMask.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_TRANSMISSION_MASK:
+            result = surfacedata.transmissionMask.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_THICKNESS:
+            result = surfacedata.thickness.xxx;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_TANGENT:
+            result = surfacedata.tangentWS * 0.5 + 0.5;
+            break;
+        case DEBUGVIEW_FABRIC_SURFACEDATA_ANISOTROPY:
+            result = surfacedata.anisotropy.xxx;
+            break;
+    }
+}
+
 //
 // Debug functions
 //
@@ -106,6 +168,9 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
 {
     switch (paramId)
     {
+        case DEBUGVIEW_FABRIC_BSDFDATA_IS_DEFERRED:
+            result = GetIndexColor(bsdfdata.isDeferred);
+            break;
         case DEBUGVIEW_FABRIC_BSDFDATA_MATERIAL_FEATURES:
             result = GetIndexColor(bsdfdata.materialFeatures);
             break;
@@ -166,66 +231,6 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
             break;
         case DEBUGVIEW_FABRIC_BSDFDATA_ANISOTROPY:
             result = bsdfdata.anisotropy.xxx;
-            break;
-    }
-}
-
-//
-// Debug functions
-//
-void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout float3 result, inout bool needLinearToSRGB)
-{
-    switch (paramId)
-    {
-        case DEBUGVIEW_FABRIC_SURFACEDATA_MATERIAL_FEATURES:
-            result = GetIndexColor(surfacedata.materialFeatures);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_BASE_COLOR:
-            result = surfacedata.baseColor;
-            needLinearToSRGB = true;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_SPECULAR_OCCLUSION:
-            result = surfacedata.specularOcclusion.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_NORMAL:
-            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_NORMAL_VIEW_SPACE:
-            result = IsNormalized(surfacedata.normalWS)? surfacedata.normalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_GEOMETRIC_NORMAL:
-            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_GEOMETRIC_NORMAL_VIEW_SPACE:
-            result = IsNormalized(surfacedata.geomNormalWS)? surfacedata.geomNormalWS * 0.5 + 0.5 : float3(1.0, 0.0, 0.0);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_SMOOTHNESS:
-            result = surfacedata.perceptualSmoothness.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_AMBIENT_OCCLUSION:
-            result = surfacedata.ambientOcclusion.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_SPECULAR_TINT:
-            result = surfacedata.specularColor;
-            needLinearToSRGB = true;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_DIFFUSION_PROFILE_HASH:
-            result = GetIndexColor(surfacedata.diffusionProfileHash);
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_SUBSURFACE_MASK:
-            result = surfacedata.subsurfaceMask.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_TRANSMISSION_MASK:
-            result = surfacedata.transmissionMask.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_THICKNESS:
-            result = surfacedata.thickness.xxx;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_TANGENT:
-            result = surfacedata.tangentWS * 0.5 + 0.5;
-            break;
-        case DEBUGVIEW_FABRIC_SURFACEDATA_ANISOTROPY:
-            result = surfacedata.anisotropy.xxx;
             break;
     }
 }

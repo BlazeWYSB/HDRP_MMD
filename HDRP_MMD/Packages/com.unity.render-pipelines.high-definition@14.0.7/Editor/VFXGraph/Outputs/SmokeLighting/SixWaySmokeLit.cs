@@ -79,6 +79,7 @@ namespace UnityEditor.VFX.HDRP
         public struct BSDFData
         {
             public uint materialFeatures;
+            public uint isDeferred;
 
             public float absorptionRange;
 

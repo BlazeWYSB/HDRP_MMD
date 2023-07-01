@@ -239,6 +239,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
         public static readonly int _LightLayersMaskBuffer4 = Shader.PropertyToID("_LightLayersMaskBuffer4");
         public static readonly int _LightLayersMaskBuffer5 = Shader.PropertyToID("_LightLayersMaskBuffer5");
+        public static readonly int _CustomMainLightDirection = Shader.PropertyToID("_CustomMainLightDirection");
 
         public static readonly int _InputDepth = Shader.PropertyToID("_InputDepthTexture");
 

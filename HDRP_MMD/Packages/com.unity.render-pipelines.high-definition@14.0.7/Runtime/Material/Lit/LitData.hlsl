@@ -309,7 +309,7 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
 
     // This is use with anisotropic material
     surfaceData.tangentWS = Orthonormalize(surfaceData.tangentWS, surfaceData.normalWS);
-
+                               
 #if defined(_ENABLE_GEOMETRIC_SPECULAR_AA) && !defined(SHADER_STAGE_RAY_TRACING)
     // Specular AA
     #ifdef PROJECTED_SPACE_NDF_FILTERING
@@ -319,8 +319,54 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     #endif
 #endif
 
+
+                                               
+    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.matCapColor = float3(0,0,0);   
+    surfaceData.curveColor = 0;
+    surfaceData.nprFeatures = 0;
+                                         
     // Caution: surfaceData must be fully initialize before calling GetBuiltinData
     GetBuiltinData(input, V, posInput, surfaceData, alpha, bentNormalWS, depthOffset, layerTexCoord.base, builtinData);
+#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                 
+float3 L = normalize(_CustomMainLightDirection.xyz*2 - float3(1,1,1));        
+float3 N = surfaceData.normalWS;          
+
+    surfaceData.matCapColor = float3(1,1,1);
+    surfaceData.curveColor = 1;
+    surfaceData.nprFeatures = 1;
+#endif   
+#if defined(_PGR)  
+                        
+    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
+    float Half_NdotRevL= dot(N, L) * 0.5 + 0.5;                                                                
+    surfaceData.ilmColor.g =  saturate( 1- smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));
+    surfaceData.ilmColor.rb = ilmColor.rb;
+#endif                   
+#if defined(_PGR_Face)                                                                                       
+    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base) ).rgb;   
+    UVMapping revUV = layerTexCoord.base;
+    revUV.uv.x = 1 - revUV.uv.x;  
+    float revLightMap = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(revUV)).b;     
+    float3 rightDir  = TransformObjectToWorldNormal(-_SDFRight.xyz);
+    float3 frontDir  = TransformObjectToWorldNormal(-_SDFFront.xyz);
+    float3 LightDirXZ = normalize(float3(L.x,0, L.z));
+    float sdfDot = saturate(dot(frontDir, LightDirXZ) * 0.5 + 0.5);
+    float sdfMask = dot(LightDirXZ, rightDir) > 0 ? ilmColor.b : revLightMap;                                                        
+
+    surfaceData.ilmColor.g  = 1- smoothstep(sdfMask, sdfMask , sdfDot * saturate(3*ilmColor.g));                                     
+    surfaceData.ilmColor.r = ilmColor.r;                                                                                            
+    surfaceData.ilmColor.b = 1;
+    surfaceData.nprFeatures = 2;
+#endif          
+#if defined(_PGR_Hair)                    
+    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
+    float Half_NdotRevL= dot(N, L) * 0.5 + 0.5;                                                        
+    surfaceData.ilmColor.g =  saturate( 1- smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL ));       
+    surfaceData.ilmColor.rb = ilmColor.rb;   
+    surfaceData.nprFeatures = 3;
+#endif
+
 
 #ifdef _ALPHATEST_ON
     // Used for sharpening by alpha to mask

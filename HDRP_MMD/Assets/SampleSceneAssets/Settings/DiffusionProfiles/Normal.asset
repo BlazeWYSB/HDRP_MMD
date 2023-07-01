@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2686e09ec7aef44bad2843e4416f057, type: 3}
-  m_Name: BambooLeaves
+  m_Name: Normal
   m_EditorClassIdentifier: 
   profile:
-    scatteringDistance: {r: 0.5152035, g: 0.1313348, b: 0.07290197, a: 1}
+    scatteringDistance: {r: 0.0057563293, g: 0.010439379, b: 0.045393806, a: 1}
     scatteringDistanceMultiplier: 4.61
     transmissionTint: {r: 1, g: 1, b: 1, a: 1}
     texturingMode: 0
-    transmissionMode: 1
-    thicknessRemap: {x: 0, y: 8.387555}
-    worldScale: 1
+    transmissionMode: 0
+    thicknessRemap: {x: 0, y: 4.258869}
+    worldScale: 0.13
     ior: 2
-    hash: 1082089202
+    hash: 1076595996
   m_Version: 2

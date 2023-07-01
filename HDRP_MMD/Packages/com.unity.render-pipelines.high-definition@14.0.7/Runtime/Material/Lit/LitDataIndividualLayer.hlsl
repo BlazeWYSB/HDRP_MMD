@@ -196,7 +196,7 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
 #ifdef _DETAIL_MAP_IDX
     detailMask = 1.0;      
     #ifdef _MASKMAP_IDX
-    #ifndef _PGRPBR
+    #ifndef _PGR
         detailMask = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).b;     
     #endif
     #endif
@@ -234,9 +234,9 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
     bentNormalTS = ADD_IDX(GetBentNormalTS)(input, layerTexCoord, normalTS, detailNormalTS, detailMask);
 
 #if defined(_MASKMAP_IDX)
-#if defined(_PGRPBR)           
+#if defined(_PGR)           
     surfaceData.perceptualSmoothness =  SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).r;
-    surfaceData.perceptualSmoothness =  1 - lerp(ADD_IDX(_SmoothnessRemapMin), ADD_IDX(_SmoothnessRemapMax), surfaceData.perceptualSmoothness);
+    surfaceData.perceptualSmoothness =  1 - sqrt(lerp(ADD_IDX(_SmoothnessRemapMin), ADD_IDX(_SmoothnessRemapMax), surfaceData.perceptualSmoothness));
 #else
     surfaceData.perceptualSmoothness = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).a;
     surfaceData.perceptualSmoothness = lerp(ADD_IDX(_SmoothnessRemapMin), ADD_IDX(_SmoothnessRemapMax), surfaceData.perceptualSmoothness);
@@ -255,7 +255,7 @@ float ADD_IDX(GetSurfaceData)(FragInputs input, LayerTexCoord layerTexCoord, out
 
     // MaskMap is RGBA: Metallic, Ambient Occlusion (Optional), detail Mask (Optional), Smoothness
 #ifdef _MASKMAP_IDX
-#if defined(_PGRPBR)                                                                                                                                        
+#if defined(_PGR)                                                                                                                                        
     surfaceData.metallic = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).g;
     surfaceData.metallic = lerp(ADD_IDX(_MetallicRemapMin), ADD_IDX(_MetallicRemapMax), surfaceData.metallic);
     surfaceData.ambientOcclusion = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base)).b;
@@ -428,11 +428,5 @@ MATERIALFEATUREFLAGS_LIT_STANDARD;
     surfaceData.matCapColor = float3(0,0,0);   
     surfaceData.curveColor = 0;
     surfaceData.nprFeatures = 0;
-#if defined(_PGR)     
-    surfaceData.ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
-    surfaceData.matCapColor = float3(1,1,1);
-    surfaceData.curveColor = 1;
-    surfaceData.nprFeatures = 1;
-#endif
     return alpha;
 }
