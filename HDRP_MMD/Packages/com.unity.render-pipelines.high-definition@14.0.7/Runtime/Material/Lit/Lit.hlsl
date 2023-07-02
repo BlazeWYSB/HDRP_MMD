@@ -836,7 +836,7 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     bool pixelHasAnisotropy = materialFeatureId == GBUFFER_LIT_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_Hair_ANISOTROPIC;
     bool pixelHasIridescence = materialFeatureId == GBUFFER_LIT_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR || materialFeatureId == GBUFFER_LIT_Hair_IRIDESCENCE;
     bool pixelHasClearCoat = coatMask > 0.0;
-    bool pixelHasNRP = materialFeatureId == GBUFFER_LIT_NPR || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_SSS_NPR || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
+    bool pixelHasNRP = materialFeatureId == GBUFFER_LIT_NPR || materialFeatureId == GBUFFER_LIT_ANISOTROPIC_NPR || materialFeatureId == GBUFFER_LIT_SSS_NPR || materialFeatureId == GBUFFER_LIT_TRANSMISSION_SSS || materialFeatureId == GBUFFER_LIT_IRIDESCENCE_NPR;
     bool pixelHasNRPFace = materialFeatureId == GBUFFER_LIT_Face_NPR;                                                                                                                                                   
     bool pixelHasNRPHair = materialFeatureId == GBUFFER_LIT_Hair_NPR || materialFeatureId == GBUFFER_LIT_Hair_ANISOTROPIC || materialFeatureId == GBUFFER_LIT_Hair_IRIDESCENCE || materialFeatureId == GBUFFER_LIT_Hair_SSS;
                                         

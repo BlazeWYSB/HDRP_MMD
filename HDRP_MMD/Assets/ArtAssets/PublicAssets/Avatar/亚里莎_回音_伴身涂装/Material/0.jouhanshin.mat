@@ -220,7 +220,7 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 0.998
+    - _EmissiveExposureWeight: 0.992
     - _EmissiveIntensity: 123737.69
     - _EmissiveIntensityUnit: 1
     - _EnableBlendModePreserveSpecularLighting: 1
