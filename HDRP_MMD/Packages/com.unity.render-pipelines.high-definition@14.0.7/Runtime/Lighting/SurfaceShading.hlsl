@@ -59,8 +59,7 @@ DirectLighting ShadeSurface_Infinitesimal(PreLightData preLightData, BSDFData bs
 #endif
 
     return lighting;
-}
-
+}                           
 //-----------------------------------------------------------------------------
 // Directional lights
 //-----------------------------------------------------------------------------
@@ -76,8 +75,9 @@ DirectLighting ShadeSurface_Directional(LightLoopContext lightLoopContext,
     float3 L = -light.forward;
 
     // Is it worth evaluating the light?
-    if ((light.lightDimmer > 0) && IsNonZeroBSDF(V, L, preLightData, bsdfData))
-    {
+    if ((light.lightDimmer > 0) && ((bsdfData.materialFeatures & 256) != 0
+        || IsNonZeroBSDF(V, L, preLightData, bsdfData)))
+    {                                                     
         float4 lightColor = EvaluateLight_Directional(lightLoopContext, posInput, light);
         lightColor.rgb *= lightColor.a; // Composite
 

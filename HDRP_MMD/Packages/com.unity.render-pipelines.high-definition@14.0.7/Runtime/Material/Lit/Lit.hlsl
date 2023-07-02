@@ -1472,10 +1472,14 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
         diffTerm *= lerp(1, 1.0 - coatF, bsdfData.coatMask);
     }
 
-    if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR) || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR)
-                                                                        || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE))
+    if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR) || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR))
     {                                                                   
         clampedNdotL = bsdfData.ilmColor.g;   
+        flippedNdotL = 1- clampedNdotL;                
+    }   
+    if( HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE))
+    {                                                                   
+        clampedNdotL = bsdfData.ilmColor.g;    
         flippedNdotL = 1- clampedNdotL;                
     }
     // The compiler should optimize these. Can revisit later if necessary.
@@ -2216,7 +2220,10 @@ void PostEvaluateBSDF(  LightLoopContext lightLoopContext,
     lightLoopOutput.specularLighting = lighting.direct.specular + lighting.indirect.specularReflected;
     // Rescale the GGX to account for the multiple scattering.
     lightLoopOutput.specularLighting *= 1.0 + bsdfData.fresnel0 * preLightData.energyCompensation;
-
+    if( HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE))
+    {                                                                   
+       lightLoopOutput.specularLighting *=0;    
+    }
 #ifdef DEBUG_DISPLAY
     PostEvaluateBSDFDebugDisplay(aoFactor, builtinData, lighting, bsdfData.diffuseColor, lightLoopOutput);
 #endif

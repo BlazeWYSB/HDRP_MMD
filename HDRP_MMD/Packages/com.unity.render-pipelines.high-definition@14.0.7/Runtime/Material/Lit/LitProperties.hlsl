@@ -120,8 +120,8 @@ float _PPDMinSamples;
 float _PPDLodThreshold;
 
 float3 _EmissiveColor;
-float3 _SDFFront;                            
-float3 _SDFRight;
+float2 _SDFFront;                            
+float2 _SDFRight;
 float _AlbedoAffectEmissive;
 float _EmissiveExposureWeight;
 

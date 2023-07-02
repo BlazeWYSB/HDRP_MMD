@@ -343,18 +343,16 @@ float3 N = surfaceData.normalWS;
     surfaceData.ilmColor.g =  saturate( 1- smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));
     surfaceData.ilmColor.rb = ilmColor.rb;
 #endif                   
-#if defined(_PGR_Face)                                                                                       
-    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base) ).rgb;   
-    UVMapping revUV = layerTexCoord.base;
-    revUV.uv.x = 1 - revUV.uv.x;  
-    float revLightMap = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(revUV)).b;     
-    float3 rightDir  = TransformObjectToWorldNormal(-_SDFRight.xyz);
-    float3 frontDir  = TransformObjectToWorldNormal(-_SDFFront.xyz);
-    float3 LightDirXZ = normalize(float3(L.x,0, L.z));
-    float sdfDot = saturate(dot(frontDir, LightDirXZ) * 0.5 + 0.5);
-    float sdfMask = dot(LightDirXZ, rightDir) > 0 ? ilmColor.b : revLightMap;                                                        
+#if defined(_PGR_Face)              
+    float2 LightDirXZ = normalize(L.xz);
+    float sdfDot = saturate(dot(_SDFFront, LightDirXZ) * 0.5 + 0.5);                     
 
-    surfaceData.ilmColor.g  = 1- smoothstep(sdfMask, sdfMask , sdfDot * saturate(3*ilmColor.g));                                     
+    UVMapping revUV = layerTexCoord.base;
+    revUV.uv.x =dot(LightDirXZ, _SDFRight) > 0 ? revUV.uv.x : 1 - revUV.uv.x;               
+    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(revUV) ).rgb;            
+    ilmColor.b = ilmColor.b * ilmColor.g;         
+
+    surfaceData.ilmColor.g  = 1 - step(ilmColor.b , sdfDot );  
     surfaceData.ilmColor.r = ilmColor.r;                                                                                            
     surfaceData.ilmColor.b = 1;
     surfaceData.nprFeatures = 2;
