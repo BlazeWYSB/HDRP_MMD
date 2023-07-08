@@ -81,12 +81,13 @@
 #define DEBUGVIEW_AXF_BSDFDATA_FLAKES_DDY_XZ (1274)
 #define DEBUGVIEW_AXF_BSDFDATA_FLAKES_DDX_XY (1275)
 #define DEBUGVIEW_AXF_BSDFDATA_FLAKES_DDY_XY (1276)
-#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_COLOR (1277)
-#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_NORMAL_WS (1278)
-#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_IOR (1279)
-#define DEBUGVIEW_AXF_BSDFDATA_GEOMETRIC_NORMAL (1280)
-#define DEBUGVIEW_AXF_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1281)
-#define DEBUGVIEW_AXF_BSDFDATA_VIEW_DIRECTION (1282)
+#define DEBUGVIEW_AXF_BSDFDATA_NPR_AO_COLOR (1277)
+#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_COLOR (1278)
+#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_NORMAL_WS (1279)
+#define DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_IOR (1280)
+#define DEBUGVIEW_AXF_BSDFDATA_GEOMETRIC_NORMAL (1281)
+#define DEBUGVIEW_AXF_BSDFDATA_GEOMETRIC_NORMAL_VIEW_SPACE (1282)
+#define DEBUGVIEW_AXF_BSDFDATA_VIEW_DIRECTION (1283)
 
 // Generated from UnityEngine.Rendering.HighDefinition.AxF+SurfaceData
 // PackingRules = Exact
@@ -153,6 +154,7 @@ struct BSDFData
     float2 flakesDdyXZ;
     float2 flakesDdxXY;
     float2 flakesDdyXY;
+    real3 ilmColor;
     float3 clearcoatColor;
     float3 clearcoatNormalWS;
     float clearcoatIOR;
@@ -352,6 +354,9 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
             break;
         case DEBUGVIEW_AXF_BSDFDATA_FLAKES_DDY_XY:
             result = float3(bsdfdata.flakesDdyXY, 0.0);
+            break;
+        case DEBUGVIEW_AXF_BSDFDATA_NPR_AO_COLOR:
+            result = bsdfdata.ilmColor;
             break;
         case DEBUGVIEW_AXF_BSDFDATA_CLEARCOAT_COLOR:
             result = bsdfdata.clearcoatColor;

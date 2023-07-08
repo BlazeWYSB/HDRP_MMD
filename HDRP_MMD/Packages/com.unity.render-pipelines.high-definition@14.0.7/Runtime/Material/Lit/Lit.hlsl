@@ -1474,12 +1474,12 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
 
     if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR) || HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR))
     {                                                                   
-        clampedNdotL = bsdfData.ilmColor.g;   
+        clampedNdotL = 1;   
         flippedNdotL = 1- clampedNdotL;                
     }   
     if( HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRFACE))
     {                                                                   
-        clampedNdotL = bsdfData.ilmColor.g;    
+        clampedNdotL = 1;    
         flippedNdotL = 1- clampedNdotL;                
     }
     // The compiler should optimize these. Can revisit later if necessary.

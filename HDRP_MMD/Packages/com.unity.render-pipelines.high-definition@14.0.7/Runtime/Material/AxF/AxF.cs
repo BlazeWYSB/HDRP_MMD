@@ -178,6 +178,8 @@ namespace UnityEngine.Rendering.HighDefinition
             public Vector2 flakesDdyXZ;
             public Vector2 flakesDdxXY;
             public Vector2 flakesDdyXY;
+            [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
+            public Vector3 ilmColor;
 
             // BTF Variables
 

@@ -15,12 +15,13 @@
 #define DEBUGVIEW_WATER_BSDFDATA_NORMAL_VIEW_SPACE (1655)
 #define DEBUGVIEW_WATER_BSDFDATA_LOW_FREQUENCY_NORMAL_WS (1656)
 #define DEBUGVIEW_WATER_BSDFDATA_LOW_FREQUENCY_NORMAL_VIEW_SPACE (1657)
-#define DEBUGVIEW_WATER_BSDFDATA_PERCEPTUAL_ROUGHNESS (1658)
-#define DEBUGVIEW_WATER_BSDFDATA_ROUGHNESS (1659)
-#define DEBUGVIEW_WATER_BSDFDATA_CAUSTICS (1660)
-#define DEBUGVIEW_WATER_BSDFDATA_FOAM (1661)
-#define DEBUGVIEW_WATER_BSDFDATA_TIP_THICKNESS (1662)
-#define DEBUGVIEW_WATER_BSDFDATA_SURFACE_INDEX (1663)
+#define DEBUGVIEW_WATER_BSDFDATA_NPR_AO_COLOR (1658)
+#define DEBUGVIEW_WATER_BSDFDATA_PERCEPTUAL_ROUGHNESS (1659)
+#define DEBUGVIEW_WATER_BSDFDATA_ROUGHNESS (1660)
+#define DEBUGVIEW_WATER_BSDFDATA_CAUSTICS (1661)
+#define DEBUGVIEW_WATER_BSDFDATA_FOAM (1662)
+#define DEBUGVIEW_WATER_BSDFDATA_TIP_THICKNESS (1663)
+#define DEBUGVIEW_WATER_BSDFDATA_SURFACE_INDEX (1664)
 
 //
 // UnityEngine.Rendering.HighDefinition.Water+SurfaceData:  static fields
@@ -51,6 +52,7 @@ struct BSDFData
     float3 fresnel0;
     float3 normalWS;
     float3 lowFrequencyNormalWS;
+    real3 ilmColor;
     float perceptualRoughness;
     float roughness;
     float caustics;
@@ -103,6 +105,9 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
             break;
         case DEBUGVIEW_WATER_BSDFDATA_LOW_FREQUENCY_NORMAL_VIEW_SPACE:
             result = bsdfdata.lowFrequencyNormalWS * 0.5 + 0.5;
+            break;
+        case DEBUGVIEW_WATER_BSDFDATA_NPR_AO_COLOR:
+            result = bsdfdata.ilmColor;
             break;
         case DEBUGVIEW_WATER_BSDFDATA_PERCEPTUAL_ROUGHNESS:
             result = bsdfdata.perceptualRoughness.xxx;

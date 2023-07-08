@@ -160,6 +160,8 @@ namespace UnityEngine.Rendering.HighDefinition
             public float roughnessTT;
             public float roughnessTRT;
 
+            [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
+            public Vector3 ilmColor;
             public float perceptualRoughnessRadial;
 
             // Normalization factor for area lights.

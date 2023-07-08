@@ -76,6 +76,8 @@ namespace UnityEngine.Rendering.HighDefinition
             // Low frequency normal signal
             [SurfaceDataAttributes(new string[] { "Low Frequency Normal WS", "Low Frequency Normal View Space" }, true)]
             public Vector3 lowFrequencyNormalWS;
+            [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
+            public Vector3 ilmColor;
 
             // Perceptual smoothness on the surface of the water
             public float perceptualRoughness;

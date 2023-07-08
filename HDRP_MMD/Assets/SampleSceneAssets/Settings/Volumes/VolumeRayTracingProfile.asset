@@ -119,7 +119,7 @@ MonoBehaviour:
     m_Value: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.01
   directLightingStrength:
     m_OverrideState: 1
     m_Value: 0
@@ -374,15 +374,15 @@ MonoBehaviour:
     m_Value: 1
   m_RayLength:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 46.67
   m_ClampValue:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 0.5
   mode:
     m_OverrideState: 1
     m_Value: 2
   m_FullResolution:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   sampleCount:
     m_OverrideState: 1
@@ -394,17 +394,17 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   m_HalfResolutionDenoiser:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   m_DenoiserRadius:
-    m_OverrideState: 0
-    m_Value: 0.6
+    m_OverrideState: 1
+    m_Value: 0.66
   m_SecondDenoiserPass:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   m_MaxMixedRaySteps:
-    m_OverrideState: 0
-    m_Value: 48
+    m_OverrideState: 1
+    m_Value: 32
   receiverMotionRejection:
     m_OverrideState: 1
     m_Value: 0
