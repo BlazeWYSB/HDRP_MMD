@@ -397,7 +397,6 @@ BSDFData ConvertSurfaceDataToBSDFData(uint2 positionSS, SurfaceData surfaceData)
 
     // IMPORTANT: In case of foward or gbuffer pass all enable flags are statically know at compile time, so the compiler can do compile time optimization
     bsdfData.materialFeatures    = surfaceData.materialFeatures;
-
     // Standard material
     bsdfData.ambientOcclusion    = surfaceData.ambientOcclusion;
     bsdfData.specularOcclusion   = surfaceData.specularOcclusion;
@@ -463,8 +462,13 @@ BSDFData ConvertSurfaceDataToBSDFData(uint2 positionSS, SurfaceData surfaceData)
                                  surfaceData.atDistance, surfaceData.thickness,
     #endif
                                  surfaceData.transmittanceMask, bsdfData);
-#endif
-
+#endif                                                                                             
+    bsdfData.materialFeatures |= (surfaceData.nprFeatures == 1 ? 128 : 0);                                
+    if (surfaceData.nprFeatures > 0)
+    {
+        bsdfData.ilmColor = surfaceData.ilmColor;    
+    }                                                
+    
     ApplyDebugToBSDFData(bsdfData);
 
     return bsdfData;
@@ -764,7 +768,7 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
                                         
 
 #if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                                                                                         
-    outGBuffer4 =  float4(surfaceData.ilmColor.rgb, surfaceData.matCapColor.r);         
+    outGBuffer4 =  surfaceData.ilmColor;         
 #endif                                    
 #ifdef SHADOWS_SHADOWMASK
     OUT_GBUFFER_SHADOWMASK = BUILTIN_DATA_SHADOW_MASK;
@@ -797,7 +801,7 @@ uint DecodeFromGBuffer(uint2 positionSS, uint tileFeatureFlags, out BSDFData bsd
     GBufferType1 inGBuffer1 = LOAD_TEXTURE2D_X(_GBufferTexture1, positionSS);
     GBufferType2 inGBuffer2 = LOAD_TEXTURE2D_X(_GBufferTexture2, positionSS);
                                                                               
-    bsdfData.ilmColor = LOAD_TEXTURE2D_X(_LightLayersTexture, positionSS).rgb;
+    bsdfData.ilmColor = LOAD_TEXTURE2D_X(_LightLayersTexture, positionSS).rgba;
     //// Avoid to introduce a new variant for light layer as it is already long to compile
     //if (_EnableLightLayers)
     //{
@@ -1494,7 +1498,8 @@ CBSDF EvaluateBSDF(float3 V, float3 L, PreLightData preLightData, BSDFData bsdfD
         if(HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPR))
         {       
             float fernselSPec= max(0.01,pow(NdotH,3));
-            cbsdf.specR += step(1 - bsdfData.ilmColor.r, fernselSPec) * bsdfData.diffuseColor * bsdfData.ilmColor.b * clampedNdotL * 0.6;   
+            cbsdf.specR += step(1 - bsdfData.ilmColor.r, fernselSPec) * bsdfData.diffuseColor * bsdfData.ilmColor.b * clampedNdotL * 0.6;    
+            cbsdf.specR +=  cbsdf.specR*bsdfData.ilmColor.a*1000;   
         }       
         else if (HasFlag(bsdfData.materialFeatures, MATERIALFEATUREFLAGS_LIT_NPRHAIR) )
         {                                                                                                                                     

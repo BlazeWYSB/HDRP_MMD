@@ -1349,6 +1349,8 @@ namespace UnityEngine.Rendering.HighDefinition
         internal const string kCoatMaskMap = "_CoatMaskMap";
 
         internal const string kNPRAOMap = "_NPRAOMap";
+        internal const string kMatCap = "_MatCap";
         internal const string kOutlineStrength = "_OutlineStrength";
+        internal const string kCubeMapBrightness = "_CubeMapBrightness";
     }
 }

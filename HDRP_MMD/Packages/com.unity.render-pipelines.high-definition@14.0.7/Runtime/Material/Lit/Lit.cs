@@ -74,7 +74,7 @@ namespace UnityEngine.Rendering.HighDefinition
             [SurfaceDataAttributes("Curve Color", precision = FieldPrecision.Real)]
             public float curveColor;
             [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
-            public Vector3 ilmColor;
+            public Vector4 ilmColor;
 
             // SSS
             [SurfaceDataAttributes("Diffusion Profile Hash")]
@@ -147,7 +147,7 @@ namespace UnityEngine.Rendering.HighDefinition
             public float coatMask;
 
             [SurfaceDataAttributes("NPR AO Color", false, false, FieldPrecision.Real)]
-            public Vector3 ilmColor;
+            public Vector4 ilmColor;
 
             // MaterialFeature dependent attribute
 

@@ -96,6 +96,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MatCap:
+        m_Texture: {fileID: 8900000, guid: 0e72fd18e5e819746ab003b819922292, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NPRAOMap:
         m_Texture: {fileID: 2800000, guid: 895a8fa5505860a4ab1e7060433a4973, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -231,7 +235,7 @@ Material:
     - _ReceivesSSR: 0
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _Smoothness: 0.824
+    - _Smoothness: 0.492
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0

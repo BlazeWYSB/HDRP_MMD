@@ -99,7 +99,7 @@ struct SurfaceData
     real3 specularColor;
     real3 matCapColor;
     real curveColor;
-    real3 ilmColor;
+    real4 ilmColor;
     uint diffusionProfileHash;
     real subsurfaceMask;
     real transmissionMask;
@@ -128,7 +128,7 @@ struct BSDFData
     float3 normalWS;
     real perceptualRoughness;
     real coatMask;
-    real3 ilmColor;
+    real4 ilmColor;
     uint diffusionProfileIndex;
     real subsurfaceMask;
     real thickness;
@@ -198,7 +198,7 @@ void GetGeneratedSurfaceDataDebug(uint paramId, SurfaceData surfacedata, inout f
             result = surfacedata.curveColor.xxx;
             break;
         case DEBUGVIEW_LIT_SURFACEDATA_NPR_AO_COLOR:
-            result = surfacedata.ilmColor;
+            result = surfacedata.ilmColor.xyz;
             break;
         case DEBUGVIEW_LIT_SURFACEDATA_DIFFUSION_PROFILE_HASH:
             result = GetIndexColor(surfacedata.diffusionProfileHash);
@@ -284,7 +284,7 @@ void GetGeneratedBSDFDataDebug(uint paramId, BSDFData bsdfdata, inout float3 res
             result = bsdfdata.coatMask.xxx;
             break;
         case DEBUGVIEW_LIT_BSDFDATA_NPR_AO_COLOR:
-            result = bsdfdata.ilmColor;
+            result = bsdfdata.ilmColor.xyz;
             break;
         case DEBUGVIEW_LIT_BSDFDATA_DIFFUSION_PROFILE_INDEX:
             result = GetIndexColor(bsdfdata.diffusionProfileIndex);

@@ -64,7 +64,10 @@ TEXTURE2D(_CoatMaskMap);
 SAMPLER(sampler_CoatMaskMap);        
 
 TEXTURE2D(_NPRAOMap);
-SAMPLER(sampler_NPRAOMap);
+SAMPLER(sampler_NPRAOMap);   
+
+TEXTURECUBE(_MatCap);
+SAMPLER(sampler_MatCap);
 
 #else
 
@@ -94,7 +97,8 @@ PROP_DECL_TEX2D(_HeightMap);
 PROP_DECL_TEX2D(_SubsurfaceMaskMap);
 PROP_DECL_TEX2D(_TransmissionMaskMap);
 PROP_DECL_TEX2D(_ThicknessMap);         
-PROP_DECL_TEX2D(_NPRAOMap);
+PROP_DECL_TEX2D(_NPRAOMap);            
+PROP_DECL_TEX2D(_MatCap);
 
 TEXTURE2D(_LayerMaskMap);
 SAMPLER(sampler_LayerMaskMap);
@@ -117,7 +121,8 @@ float _EnableBlendModePreserveSpecularLighting;
 
 float _PPDMaxSamples;
 float _PPDMinSamples;
-float _PPDLodThreshold;
+float _PPDLodThreshold;      
+float _CubeMapBrightness;
 
 float3 _EmissiveColor;
 float2 _SDFFront;                            

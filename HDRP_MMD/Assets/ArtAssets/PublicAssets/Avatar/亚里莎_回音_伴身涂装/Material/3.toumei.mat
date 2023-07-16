@@ -13,10 +13,11 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
+  - _DISABLE_DECALS
   - _EMISSIVE_COLOR_MAP
   - _ENABLE_FOG_ON_TRANSPARENT
   - _MASKMAP
-  - _MATERIAL_FEATURE_ANISOTROPY
+  - _MATERIAL_FEATURE_CLEAR_COAT
   - _NORMALMAP
   - _NORMALMAP_TANGENT_SPACE
   - _SURFACE_TYPE_TRANSPARENT
@@ -24,7 +25,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 2750
+  m_CustomRenderQueue: 2960
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
@@ -84,6 +85,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 0f543bee77f569b45b5d19d2cea49179, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MatCap:
+        m_Texture: {fileID: 8900000, guid: 4279ec6d77e09124489d7bf12c450aca, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NPRAOMap:
         m_Texture: {fileID: 2800000, guid: 8c0db7ab930098948aa7543f92e5cee1, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -138,27 +143,28 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AORemapMax: 1.0000001
+    - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 1
-    - _AlphaCutoff: 0.044
+    - _AlphaCutoff: 0.009
     - _AlphaCutoffEnable: 1
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 10
-    - _AlphaRemapMax: 1
+    - _AlphaRemapMax: 0.64215493
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
-    - _Anisotropy: 0.96
+    - _Anisotropy: 0.958
     - _BlendMode: 0
     - _BumpScale: 1
-    - _CoatMask: 0
+    - _CoatMask: 0.445
+    - _CubeMapBrightness: 0.027
     - _CullMode: 2
     - _CullModeForward: 2
-    - _Cutoff: 0.044
+    - _Cutoff: 0.009
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalMapScale: 1
@@ -198,13 +204,13 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _MaterialID: 2
+    - _MaterialID: 1
     - _Metallic: 1
-    - _MetallicRemapMax: 1
+    - _MetallicRemapMax: 1.0000001
     - _MetallicRemapMin: 0
     - _Mode: 0
     - _NormalMapSpace: 0
-    - _NormalScale: 1
+    - _NormalScale: 1.2
     - _ObjectSpaceUVMapping: 0
     - _ObjectSpaceUVMappingEmissive: 0
     - _OcclusionStrength: 1
@@ -237,7 +243,7 @@ Material:
     - _StencilWriteMaskGBuffer: 15
     - _StencilWriteMaskMV: 41
     - _SubsurfaceMask: 1
-    - _SupportDecals: 1
+    - _SupportDecals: 0
     - _SurfaceType: 1
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
@@ -248,7 +254,7 @@ Material:
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 0
     - _TransparentDepthPrepassEnable: 0
-    - _TransparentSortPriority: 0
+    - _TransparentSortPriority: -40
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 1
     - _UVBase: 0
@@ -262,9 +268,9 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

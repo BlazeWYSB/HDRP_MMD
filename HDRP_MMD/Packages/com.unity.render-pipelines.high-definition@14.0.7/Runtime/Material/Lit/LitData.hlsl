@@ -321,7 +321,7 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
 
 
                                                
-    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.ilmColor = float4(0,0,0,0);
     surfaceData.matCapColor = float3(0,0,0);   
     surfaceData.curveColor = 0;
     surfaceData.nprFeatures = 0;
@@ -329,9 +329,10 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     // Caution: surfaceData must be fully initialize before calling GetBuiltinData
     GetBuiltinData(input, V, posInput, surfaceData, alpha, bentNormalWS, depthOffset, layerTexCoord.base, builtinData);
 #if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                 
-float3 L = normalize(_CustomMainLightDirection.xyz*2 - float3(1,1,1));        
-float3 N = surfaceData.normalWS;          
-
+    float3 L = normalize(_CustomMainLightDirection.xyz*2 - float3(1,1,1));        
+    float3 N = surfaceData.normalWS;          
+                    
+    float3 reflectDir = normalize(reflect(-V,N));
     surfaceData.matCapColor = float3(1,1,1);
     surfaceData.curveColor = 1;
     surfaceData.nprFeatures = 1;
@@ -340,8 +341,10 @@ float3 N = surfaceData.normalWS;
                         
     float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
     float Half_NdotRevL= dot(N, L) * 0.5 + 0.5;                                                                
-    surfaceData.ilmColor.g =  saturate( 1- smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));
-    surfaceData.ilmColor.rb = ilmColor.rb;
+    surfaceData.ilmColor.g =  saturate(1 - smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));
+    surfaceData.ilmColor.rb = ilmColor.rb;                                       
+    float4 cubeColor = SAMPLE_TEXTURECUBE_LOD(ADD_IDX(_MatCap), ADD_ZERO_IDX(sampler_MatCap), reflectDir, surfaceData.perceptualSmoothness);
+    surfaceData.ilmColor.w = cubeColor.r*cubeColor.a*(SAMPLE_UVMAPPING_TEXTURE2D_LOD(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base),0).a)*_CubeMapBrightness;  
 #endif                   
 #if defined(_PGR_Face)              
     float2 LightDirXZ = normalize(L.xz);

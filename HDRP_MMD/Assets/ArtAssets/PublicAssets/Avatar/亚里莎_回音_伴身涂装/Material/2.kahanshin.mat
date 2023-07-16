@@ -97,6 +97,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 264723f7c8c847946b5c0435eed08a24, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MatCap:
+        m_Texture: {fileID: 8900000, guid: 0e72fd18e5e819746ab003b819922292, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NPRAOMap:
         m_Texture: {fileID: 2800000, guid: 552ccd03ab7c2a447ba43f1f7b617737, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -165,7 +169,7 @@ Material:
     - _AlphaRemapMax: 1
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
-    - _Anisotropy: 0
+    - _Anisotropy: -0.497
     - _BlendMode: 0
     - _BumpScale: 1
     - _CoatMask: 0

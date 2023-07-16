@@ -872,7 +872,7 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     builtinData.alphaClipTreshold = _AlphaCutoff;
 #endif
                                            
-    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.ilmColor = float4(0,0,0,0);
     surfaceData.matCapColor = float3(0,0,0);   
     surfaceData.curveColor = 0;
     surfaceData.nprFeatures = 0;       

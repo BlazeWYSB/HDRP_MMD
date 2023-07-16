@@ -424,7 +424,7 @@ MATERIALFEATUREFLAGS_LIT_STANDARD;
     surfaceData.transmittanceMask = 0.0;
 
 #endif // #if !defined(LAYERED_LIT_SHADER)
-    surfaceData.ilmColor = float3(0,0,0);
+    surfaceData.ilmColor = float4(0,0,0,0);
     surfaceData.matCapColor = float3(0,0,0);   
     surfaceData.curveColor = 0;
     surfaceData.nprFeatures = 0;

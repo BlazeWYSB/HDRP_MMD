@@ -10,6 +10,8 @@ Shader "Blaze/PGR_PBR"
         [MainTexture] _BaseColorMap("BaseColorMap", 2D) = "white" {}
         [HideInInspector] _BaseColorMap_MipInfo("_BaseColorMap_MipInfo", Vector) = (0, 0, 0, 0)
         [NoScaleOffset]_NPRAOMap("NPR AO Map", 2D) = "white" {}
+        [NoScaleOffset]_MatCap("Mat Cap", Cube) = "black" {}
+        _CubeMapBrightness("cube map brightness", Range(0.0, 1.0)) = 1
         //_CustomMainLightDirection("NPR Light Direction", Vector) = (1, 0, 0, 0)
 
         _Metallic("_Metallic", Range(0.0, 1.0)) = 0
