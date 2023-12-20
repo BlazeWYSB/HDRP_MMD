@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hair
   m_EditorClassIdentifier: 
   profile:
-    scatteringDistance: {r: 0.1465848, g: 0.023153365, b: 0.39157256, a: 1}
+    scatteringDistance: {r: 0.14658473, g: 0.02315334, b: 0.39157256, a: 1}
     scatteringDistanceMultiplier: 6.57
     transmissionTint: {r: 1, g: 1, b: 1, a: 1}
     texturingMode: 0
