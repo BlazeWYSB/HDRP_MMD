@@ -5,6 +5,17 @@
 //-----------------------------------------------------------------------------
 // Directional and punctual lights (infinitesimal solid angle)
 //-----------------------------------------------------------------------------
+                                                                                                                 
+#define MATERIALFEATUREFLAGS_LIT_STANDARD (1)
+#define MATERIALFEATUREFLAGS_LIT_SPECULAR_COLOR (2)
+#define MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING (4)
+#define MATERIALFEATUREFLAGS_LIT_TRANSMISSION (8)
+#define MATERIALFEATUREFLAGS_LIT_ANISOTROPY (16)
+#define MATERIALFEATUREFLAGS_LIT_IRIDESCENCE (32)
+#define MATERIALFEATUREFLAGS_LIT_CLEAR_COAT (64)
+#define MATERIALFEATUREFLAGS_LIT_NPR (128)
+#define MATERIALFEATUREFLAGS_LIT_NPRFACE (256)
+#define MATERIALFEATUREFLAGS_LIT_NPRHAIR (512)
 
 #ifndef OVERRIDE_SHOULD_EVALUATE_THICK_OBJECT_TRANSMISSION
 bool ShouldEvaluateThickObjectTransmission(float3 V, float3 L, PreLightData preLightData,
@@ -64,6 +75,13 @@ DirectLighting ShadeSurface_Infinitesimal(PreLightData preLightData, BSDFData bs
 // Directional lights
 //-----------------------------------------------------------------------------
 
+bool IsNPRNdotL(BSDFData bsdfData)
+{
+    return (bsdfData.materialFeatures & MATERIALFEATUREFLAGS_LIT_NPRFACE) != 0 ||
+    (bsdfData.materialFeatures & MATERIALFEATUREFLAGS_LIT_NPR) != 0 ||
+    (bsdfData.materialFeatures & MATERIALFEATUREFLAGS_LIT_NPRHAIR) != 0;
+
+}
 DirectLighting ShadeSurface_Directional(LightLoopContext lightLoopContext,
                                         PositionInputs posInput, BuiltinData builtinData,
                                         PreLightData preLightData, DirectionalLightData light,
@@ -75,8 +93,7 @@ DirectLighting ShadeSurface_Directional(LightLoopContext lightLoopContext,
     float3 L = -light.forward;
 
     // Is it worth evaluating the light?
-    if ((light.lightDimmer > 0) && ((bsdfData.materialFeatures & 256) != 0
-        || IsNonZeroBSDF(V, L, preLightData, bsdfData)))
+    if ((light.lightDimmer > 0) && (IsNPRNdotL(bsdfData) || IsNonZeroBSDF(V, L, preLightData, bsdfData)))
     {                                                     
         float4 lightColor = EvaluateLight_Directional(lightLoopContext, posInput, light);
         lightColor.rgb *= lightColor.a; // Composite
@@ -121,8 +138,7 @@ DirectLighting ShadeSurface_Directional(LightLoopContext lightLoopContext,
         // Note that it is not correct with our precomputation of PartLambdaV
         // (means if we disable the optimization it will not have the
         // same result) but we don't care as it is a hack anyway.
-        ClampRoughness(preLightData, bsdfData, light.minRoughness);
-
+        //ClampRoughness(preLightData, bsdfData, light.minRoughness);  
         lighting = ShadeSurface_Infinitesimal(preLightData, bsdfData, V, L, lightColor.rgb,
                                               light.diffuseDimmer, light.specularDimmer);
     }

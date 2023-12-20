@@ -1,4 +1,4 @@
-Shader "Blaze/PGR_Hair"
+Shader "Blaze/PGR_HairOutLine"
 {
     Properties
     {
@@ -9,8 +9,6 @@ Shader "Blaze/PGR_Hair"
         [MainColor] _BaseColor("BaseColor", Color) = (1,1,1,1)
         [MainTexture] _BaseColorMap("BaseColorMap", 2D) = "white" {}
         [HideInInspector] _BaseColorMap_MipInfo("_BaseColorMap_MipInfo", Vector) = (0, 0, 0, 0)
-        [NoScaleOffset]_NPRAOMap("NPR AO Map", 2D) = "white" {}
-        //_CustomMainLightDirection("NPR Light Direction", Vector) = (1, 0, 0, 0)
 
         _Metallic("_Metallic", Range(0.0, 1.0)) = 0
         _Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
@@ -209,7 +207,7 @@ Shader "Blaze/PGR_Hair"
         [ToggleUI] _ReceivesSSR("Receives SSR", Float) = 1.0
         [ToggleUI] _ReceivesSSRTransparent("Receives SSR Transparent", Float) = 0.0
         [ToggleUI] _AddPrecomputedVelocity("AddPrecomputedVelocity", Float) = 0.0
-
+         _OutlineStrength("Outline", Range(0.0, 10.0)) = 1
         // Ray Tracing
         [ToggleUI] _RayTracing("Ray Tracing (Preview)", Float) = 0
 
@@ -264,8 +262,7 @@ Shader "Blaze/PGR_Hair"
     #pragma shader_feature_local_fragment _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #pragma shader_feature_local_raytracing _ENABLESPECULAROCCLUSION
     #pragma shader_feature_local_raytracing _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
-    
-    #define _PGR_Hair
+
     #ifdef _ENABLESPECULAROCCLUSION
     #define _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #endif
@@ -326,7 +323,7 @@ Shader "Blaze/PGR_Hair"
 
     // This shader support recursive rendering for raytracing
     #define HAVE_RECURSIVE_RENDERING
-
+    #define _NPR_OUTLINE
     // This shader support vertex modification
     #define HAVE_VERTEX_MODIFICATION
 
@@ -466,18 +463,19 @@ Shader "Blaze/PGR_Hair"
             Cull [_CullMode]
             ZTest [_ZTestGBuffer]
             
+
             Stencil
             {
-                WriteMask 15
-                Ref [_StencilRefGBuffer]
+                WriteMask [_StencilWriteMaskGBuffer]
+                Ref 42
                 ReadMask 48
-                Comp GEqual
+                Comp LEqual
                 Pass Replace
             }
 
             // Depending on virtual texturing, light layers buffer can be put in slot 4 or 5
             // When using decal layers, we must make sure we don't write to RGB channels
-            ColorMask RGBA 4
+            ColorMask [_LightLayersMaskBuffer4] 4
             ColorMask [_LightLayersMaskBuffer5] 5
 
             HLSLPROGRAM
@@ -615,7 +613,7 @@ Shader "Blaze/PGR_Hair"
                 WriteMask [_StencilWriteMaskDepth]
                 Ref [_StencilRefDepth]
                 ReadMask 48
-                Comp GEqual
+                Comp Always
                 Pass Replace
             }
 
@@ -838,11 +836,12 @@ Shader "Blaze/PGR_Hair"
             Name "Forward"
             Tags { "LightMode" = "Forward" } // This will be only for transparent object based on the RenderQueue index
 
-            Stencil
+          
+             Stencil
             {
-                WriteMask [_StencilWriteMask]
-                Ref [_StencilRef]
-                Comp Always
+                WriteMask [_StencilWriteMaskGBuffer]
+                Ref 16
+                Comp Less
                 Pass Replace
             }
 

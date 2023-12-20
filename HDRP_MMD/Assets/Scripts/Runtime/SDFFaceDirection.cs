@@ -6,7 +6,7 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 [ExecuteAlways]
 public class SDFFaceDirection : MonoBehaviour
 {
-    public Material face;
+    public List<Material> face=new List<Material>();
 
     // Start is called before the first frame update
     Vector2 Tmp;
@@ -16,12 +16,19 @@ public class SDFFaceDirection : MonoBehaviour
         Tmp.x = transform.forward.x;
         Tmp.y = transform.forward.z;
         Tmp=Tmp.normalized;
-        face.SetVector("_SDFFront", Tmp);
+        for(int i = 0; i < face.Count; i++)
+        {
+            face[i].SetVector("_SDFFront", Tmp);
+        }
+
 
         Tmp.x = transform.right.x;
         Tmp.y = transform.right.z;
         Tmp = Tmp.normalized;
-        face.SetVector("_SDFRight", Tmp);
+        for (int i = 0; i < face.Count; i++)
+        {
+            face[i].SetVector("_SDFRight", Tmp);
+        }
     }
     //private void OnDrawGizmos()
     //{Gizmos.color = Color.red;

@@ -328,7 +328,7 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
                                          
     // Caution: surfaceData must be fully initialize before calling GetBuiltinData
     GetBuiltinData(input, V, posInput, surfaceData, alpha, bentNormalWS, depthOffset, layerTexCoord.base, builtinData);
-#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                 
+#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)  ||  defined(_PGR_Eye)        
     float3 L = normalize(_CustomMainLightDirection.xyz*2 - float3(1,1,1));        
     float3 N = surfaceData.normalWS;          
                     
@@ -341,7 +341,7 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
                         
     float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(layerTexCoord.base)).rgb;
     float Half_NdotRevL= dot(N, L) * 0.5 + 0.5;                                                                
-    surfaceData.ilmColor.g =  saturate(1 - smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));
+    surfaceData.ilmColor.g =  saturate(1 - smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL + 0.1 ));                     
     surfaceData.ilmColor.rb = ilmColor.rb;                                       
     float4 cubeColor = SAMPLE_TEXTURECUBE_LOD(ADD_IDX(_MatCap), ADD_ZERO_IDX(sampler_MatCap), reflectDir, surfaceData.perceptualSmoothness);
     surfaceData.ilmColor.w = cubeColor.r*cubeColor.a*(SAMPLE_UVMAPPING_TEXTURE2D_LOD(ADD_IDX(_MaskMap), SAMPLER_MASKMAP_IDX, ADD_IDX(layerTexCoord.base),0).a)*_CubeMapBrightness;  
@@ -366,6 +366,20 @@ void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs p
     surfaceData.ilmColor.g =  saturate( 1- smoothstep( ilmColor.g - 0.05,  ilmColor.g + 0.005 , Half_NdotRevL ));       
     surfaceData.ilmColor.rb = ilmColor.rb;   
     surfaceData.nprFeatures = 3;
+#endif            
+#if defined(_PGR_Eye)                                   
+    float2 LightDirXZ = normalize(L.xz);
+    float sdfDot = saturate(dot(_SDFFront, LightDirXZ) * 0.5 + 0.5);   
+    UVMapping revUV = layerTexCoord.base;
+    revUV.uv.x =dot(LightDirXZ, _SDFRight) > 0 ? revUV.uv.x : 1 - revUV.uv.x;          
+    float3 ilmColor = SAMPLE_UVMAPPING_TEXTURE2D(ADD_IDX(_NPRAOMap), ADD_ZERO_IDX(sampler_NPRAOMap), ADD_IDX(revUV) ).rgb;        
+
+                                                           
+    ilmColor.b = ilmColor.b * ilmColor.g;         
+    surfaceData.ilmColor.g  = 1 - step(ilmColor.b , sdfDot );  
+    surfaceData.ilmColor.r = ilmColor.r;                                                                                            
+    surfaceData.ilmColor.b = 1;
+    surfaceData.nprFeatures = 1;              
 #endif
 
 

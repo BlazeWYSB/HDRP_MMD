@@ -1,4 +1,4 @@
-Shader "Blaze/PGR_Hair"
+Shader "Blaze/PGR_Eye"
 {
     Properties
     {
@@ -10,6 +10,10 @@ Shader "Blaze/PGR_Hair"
         [MainTexture] _BaseColorMap("BaseColorMap", 2D) = "white" {}
         [HideInInspector] _BaseColorMap_MipInfo("_BaseColorMap_MipInfo", Vector) = (0, 0, 0, 0)
         [NoScaleOffset]_NPRAOMap("NPR AO Map", 2D) = "white" {}
+        [NoScaleOffset]_MatCap("Mat Cap", Cube) = "black" {}
+        _CubeMapBrightness("cube map brightness", Range(0.0, 1.0)) = 1
+        _SDFFront("_SDFFront", Vector) = (1, 0, 0, 0)
+        _SDFRight("_SDFRight", Vector) = (0, 1, 0, 0)
         //_CustomMainLightDirection("NPR Light Direction", Vector) = (1, 0, 0, 0)
 
         _Metallic("_Metallic", Range(0.0, 1.0)) = 0
@@ -264,8 +268,8 @@ Shader "Blaze/PGR_Hair"
     #pragma shader_feature_local_fragment _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #pragma shader_feature_local_raytracing _ENABLESPECULAROCCLUSION
     #pragma shader_feature_local_raytracing _ _SPECULAR_OCCLUSION_NONE _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
-    
-    #define _PGR_Hair
+
+    #define _PGR_Eye
     #ifdef _ENABLESPECULAROCCLUSION
     #define _SPECULAR_OCCLUSION_FROM_BENT_NORMAL_MAP
     #endif
@@ -465,12 +469,12 @@ Shader "Blaze/PGR_Hair"
 
             Cull [_CullMode]
             ZTest [_ZTestGBuffer]
-            
+
             Stencil
             {
-                WriteMask 15
-                Ref [_StencilRefGBuffer]
+                //WriteMask [_StencilWriteMaskGBuffer]
                 ReadMask 48
+                Ref 42
                 Comp GEqual
                 Pass Replace
             }
@@ -612,9 +616,9 @@ Shader "Blaze/PGR_Hair"
             // To be able to tag stencil with disableSSR information for forward
             Stencil
             {
-                WriteMask [_StencilWriteMaskDepth]
-                Ref [_StencilRefDepth]
+                //WriteMask [_StencilWriteMaskDepth]
                 ReadMask 48
+                Ref 40
                 Comp GEqual
                 Pass Replace
             }

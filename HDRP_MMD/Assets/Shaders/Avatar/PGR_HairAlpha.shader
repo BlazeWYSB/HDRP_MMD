@@ -1,4 +1,4 @@
-Shader "Blaze/PGR_Hair"
+Shader "Blaze/PGR_HairAlpha"
 {
     Properties
     {
@@ -465,16 +465,17 @@ Shader "Blaze/PGR_Hair"
 
             Cull [_CullMode]
             ZTest [_ZTestGBuffer]
-            
+
             Stencil
             {
-                WriteMask 15
-                Ref [_StencilRefGBuffer]
+                WriteMask [_StencilWriteMaskGBuffer]
+                Ref 42
                 ReadMask 48
-                Comp GEqual
+                Comp LEqual
                 Pass Replace
             }
-
+            
+            Blend SrcAlpha OneMinusSrcAlpha
             // Depending on virtual texturing, light layers buffer can be put in slot 4 or 5
             // When using decal layers, we must make sure we don't write to RGB channels
             ColorMask RGBA 4
@@ -565,96 +566,96 @@ Shader "Blaze/PGR_Hair"
             ENDHLSL
         }
 
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags{ "LightMode" = "ShadowCaster" }
+        //Pass
+        //{
+        //    Name "ShadowCaster"
+        //    Tags{ "LightMode" = "ShadowCaster" }
 
-            Cull[_CullMode]
+        //    Cull[_CullMode]
 
-            ZClip [_ZClip]
-            ZWrite On
-            ZTest LEqual
+        //    ZClip [_ZClip]
+        //    ZWrite On
+        //    ZTest LEqual
 
-            ColorMask 0
+        //    ColorMask 0
 
-            HLSLPROGRAM
+        //    HLSLPROGRAM
 
-            #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
-            //enable GPU instancing support
-            #pragma multi_compile_instancing
-            #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            // enable dithering LOD crossfade
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
+        //    #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
+        //    //enable GPU instancing support
+        //    #pragma multi_compile_instancing
+        //    #pragma instancing_options renderinglayer
+        //    #pragma multi_compile _ DOTS_INSTANCING_ON
+        //    // enable dithering LOD crossfade
+        //    #pragma multi_compile _ LOD_FADE_CROSSFADE
 
-            #define SHADERPASS SHADERPASS_SHADOWS
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
+        //    #define SHADERPASS SHADERPASS_SHADOWS
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
 
-            #pragma vertex Vert
-            #pragma fragment Frag
+        //    #pragma vertex Vert
+        //    #pragma fragment Frag
 
-            ENDHLSL
-        }
+        //    ENDHLSL
+        //}
 
-        Pass
-        {
-            Name "DepthOnly"
-            Tags{ "LightMode" = "DepthOnly" }
+        //Pass
+        //{
+        //    Name "DepthOnly"
+        //    Tags{ "LightMode" = "DepthOnly" }
 
-            Cull[_CullMode]
-            AlphaToMask [_AlphaCutoffEnable]
+        //    Cull[_CullMode]
+        //    AlphaToMask [_AlphaCutoffEnable]
 
-            // To be able to tag stencil with disableSSR information for forward
-            Stencil
-            {
-                WriteMask [_StencilWriteMaskDepth]
-                Ref [_StencilRefDepth]
-                ReadMask 48
-                Comp GEqual
-                Pass Replace
-            }
+        //    // To be able to tag stencil with disableSSR information for forward
+        //    Stencil
+        //    {
+        //        WriteMask [_StencilWriteMaskDepth]
+        //        Ref [_StencilRefDepth]
+        //        ReadMask 48
+        //        Comp GEqual
+        //        Pass Replace
+        //    }
 
-            ZWrite On
+        //    ZWrite On
 
-            HLSLPROGRAM
+        //    HLSLPROGRAM
 
-            #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
-            //enable GPU instancing support
-            #pragma multi_compile_instancing
-            #pragma instancing_options renderinglayer
-            #pragma multi_compile _ DOTS_INSTANCING_ON
-            // enable dithering LOD crossfade
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
+        //    #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
+        //    //enable GPU instancing support
+        //    #pragma multi_compile_instancing
+        //    #pragma instancing_options renderinglayer
+        //    #pragma multi_compile _ DOTS_INSTANCING_ON
+        //    // enable dithering LOD crossfade
+        //    #pragma multi_compile _ LOD_FADE_CROSSFADE
 
-            // In deferred, depth only pass don't output anything.
-            // In forward it output the normal buffer
-            #pragma multi_compile _ WRITE_NORMAL_BUFFER
-            #pragma multi_compile_fragment _ WRITE_MSAA_DEPTH
-            #pragma multi_compile _ WRITE_DECAL_BUFFER
+        //    // In deferred, depth only pass don't output anything.
+        //    // In forward it output the normal buffer
+        //    #pragma multi_compile _ WRITE_NORMAL_BUFFER
+        //    #pragma multi_compile_fragment _ WRITE_MSAA_DEPTH
+        //    #pragma multi_compile _ WRITE_DECAL_BUFFER
 
-            #define SHADERPASS SHADERPASS_DEPTH_ONLY
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+        //    #define SHADERPASS SHADERPASS_DEPTH_ONLY
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
 
-            #ifdef WRITE_NORMAL_BUFFER // If enabled we need all regular interpolator
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
-            #else
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
-            #endif
+        //    #ifdef WRITE_NORMAL_BUFFER // If enabled we need all regular interpolator
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
+        //    #else
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
+        //    #endif
 
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+        //    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
 
-            #pragma vertex Vert
-            #pragma fragment Frag
+        //    #pragma vertex Vert
+        //    #pragma fragment Frag
 
-            ENDHLSL
-        }
+        //    ENDHLSL
+        //}
 
         Pass
         {
@@ -838,14 +839,14 @@ Shader "Blaze/PGR_Hair"
             Name "Forward"
             Tags { "LightMode" = "Forward" } // This will be only for transparent object based on the RenderQueue index
 
-            Stencil
+             Stencil
             {
-                WriteMask [_StencilWriteMask]
-                Ref [_StencilRef]
-                Comp Always
+                ReadMask 48
+                //10
+                Ref 16
+                Comp less
                 Pass Replace
             }
-
             Blend [_SrcBlend] [_DstBlend], [_AlphaSrcBlend] [_AlphaDstBlend]
             Blend 1 SrcAlpha OneMinusSrcAlpha // target 1 alpha blend required for VT feedback. All other uses will pass 1.
 

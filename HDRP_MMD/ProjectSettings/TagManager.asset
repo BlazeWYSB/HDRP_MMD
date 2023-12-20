@@ -9,10 +9,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - RepaintHairAlfterBrow
   - Water
   - UI
-  - 
+  - face
   - 
   - PostProcessing
   - Not in Reflection

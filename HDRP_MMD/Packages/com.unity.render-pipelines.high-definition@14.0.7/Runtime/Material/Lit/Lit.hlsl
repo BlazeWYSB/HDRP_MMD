@@ -420,15 +420,15 @@ BSDFData ConvertSurfaceDataToBSDFData(uint2 positionSS, SurfaceData surfaceData)
     bsdfData.diffusionProfileIndex = FindDiffusionProfileIndex(surfaceData.diffusionProfileHash);
 
     if (HasFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_LIT_SUBSURFACE_SCATTERING))
-    {
+    {                                      
         // Assign profile id and overwrite fresnel0
-        FillMaterialSSS(bsdfData.diffusionProfileIndex, surfaceData.subsurfaceMask, bsdfData);
+        FillMaterialSSS(bsdfData.diffusionProfileIndex, surfaceData.subsurfaceMask, bsdfData);              
     }
 
     if (HasFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_LIT_TRANSMISSION))
     {
         // Assign profile id and overwrite fresnel0
-        FillMaterialTransmission(bsdfData.diffusionProfileIndex, surfaceData.thickness, surfaceData.transmissionMask, bsdfData);
+        FillMaterialTransmission(bsdfData.diffusionProfileIndex, surfaceData.thickness, surfaceData.transmissionMask, bsdfData); 
     }
 
     if (HasFlag(surfaceData.materialFeatures, MATERIALFEATUREFLAGS_LIT_ANISOTROPY))
@@ -462,12 +462,29 @@ BSDFData ConvertSurfaceDataToBSDFData(uint2 positionSS, SurfaceData surfaceData)
                                  surfaceData.atDistance, surfaceData.thickness,
     #endif
                                  surfaceData.transmittanceMask, bsdfData);
-#endif                                                                                             
-    bsdfData.materialFeatures |= (surfaceData.nprFeatures == 1 ? 128 : 0);                                
+#endif                                                                               
+    if (surfaceData.nprFeatures == 1)
+    {
+        bsdfData.materialFeatures |= MATERIALFEATUREFLAGS_LIT_NPR;                  
+    }
+    else if (surfaceData.nprFeatures == 2)
+    {
+        bsdfData.materialFeatures |= MATERIALFEATUREFLAGS_LIT_NPRFACE;
+    }                              
+    else if (surfaceData.nprFeatures == 3)
+    {
+        bsdfData.materialFeatures |= MATERIALFEATUREFLAGS_LIT_NPRHAIR;
+    }
+    else
+    {
+        bsdfData.materialFeatures = 0;
+    }
     if (surfaceData.nprFeatures > 0)
     {
         bsdfData.ilmColor = surfaceData.ilmColor;    
     }                                                
+    
+    uint materialFeatureId;
     
     ApplyDebugToBSDFData(bsdfData);
 
@@ -767,7 +784,7 @@ void EncodeIntoGBuffer(SurfaceData surfaceData
 //#endif
                                         
 
-#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair)                                                                                         
+#if  defined(_PGR) || defined(_PGR_Face) || defined(_PGR_Hair) || defined(_PGR_Eye)                                                                                         
     outGBuffer4 =  surfaceData.ilmColor;         
 #endif                                    
 #ifdef SHADOWS_SHADOWMASK

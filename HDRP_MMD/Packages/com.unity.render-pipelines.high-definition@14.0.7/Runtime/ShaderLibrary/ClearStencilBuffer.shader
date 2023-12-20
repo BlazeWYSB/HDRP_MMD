@@ -46,10 +46,10 @@ Shader "Hidden/HDRP/ClearStencilBuffer"
         {
             Stencil
             {
-                Ref       0
-                ReadMask  0
+                Ref       16
+                ReadMask  48
                 WriteMask [_StencilMask]
-                Comp      Always
+                Comp      GEqual
                 Pass      Replace
             }
 

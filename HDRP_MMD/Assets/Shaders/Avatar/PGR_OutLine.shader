@@ -467,6 +467,7 @@ Shader "Blaze/PGR_OutLine"
             {
                 WriteMask [_StencilWriteMaskGBuffer]
                 Ref [_StencilRefGBuffer]
+                ReadMask 48
                 Comp Always
                 Pass Replace
             }
@@ -610,6 +611,7 @@ Shader "Blaze/PGR_OutLine"
             {
                 WriteMask [_StencilWriteMaskDepth]
                 Ref [_StencilRefDepth]
+                ReadMask 48
                 Comp Always
                 Pass Replace
             }
