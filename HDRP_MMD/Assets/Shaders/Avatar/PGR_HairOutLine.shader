@@ -462,14 +462,13 @@ Shader "Blaze/PGR_HairOutLine"
 
             Cull [_CullMode]
             ZTest [_ZTestGBuffer]
-            
 
             Stencil
             {
                 WriteMask [_StencilWriteMaskGBuffer]
-                Ref 42
+                Ref 34
                 ReadMask 48
-                Comp LEqual
+                Comp Greater
                 Pass Replace
             }
 
@@ -608,12 +607,12 @@ Shader "Blaze/PGR_HairOutLine"
             AlphaToMask [_AlphaCutoffEnable]
 
             // To be able to tag stencil with disableSSR information for forward
-            Stencil
+           Stencil
             {
-                WriteMask [_StencilWriteMaskDepth]
-                Ref [_StencilRefDepth]
+                WriteMask [_StencilWriteMaskGBuffer]
+                Ref 34
                 ReadMask 48
-                Comp Always
+                Comp Greater
                 Pass Replace
             }
 
@@ -836,12 +835,11 @@ Shader "Blaze/PGR_HairOutLine"
             Name "Forward"
             Tags { "LightMode" = "Forward" } // This will be only for transparent object based on the RenderQueue index
 
-          
-             Stencil
+            Stencil
             {
-                WriteMask [_StencilWriteMaskGBuffer]
-                Ref 16
-                Comp Less
+                WriteMask [_StencilWriteMask]
+                Ref [_StencilRef]
+                Comp Always
                 Pass Replace
             }
 

@@ -819,8 +819,8 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _MappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _Material_SO: {r: 1, g: 1, b: 0, a: 0}
-    - _SDFFront: {r: -0.19080894, g: 0.9816272, b: 0, a: 0}
-    - _SDFRight: {r: 0.9816272, g: 0.19080894, b: 0, a: 0}
+    - _SDFFront: {r: 0, g: 1, b: 0, a: 0}
+    - _SDFRight: {r: 1, g: 0, b: 0, a: 0}
     - _SVBRDF_AlphaMap_SO: {r: 1, g: 1, b: 0, a: 0}
     - _SVBRDF_AnisoRotationMap_SO: {r: 1, g: 1, b: 0, a: 0}
     - _SVBRDF_ClearcoatColorMap_SO: {r: 1, g: 1, b: 0, a: 0}

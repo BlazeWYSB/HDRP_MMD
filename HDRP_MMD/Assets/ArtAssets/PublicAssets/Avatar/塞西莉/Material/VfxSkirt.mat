@@ -12,6 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _DISSOLVE_ON
   - _EMISSIVE_COLOR_MAP
   - _ENABLE_FOG_ON_TRANSPARENT
@@ -60,8 +61,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _DissolveMap:
         m_Texture: {fileID: 2800000, guid: 0942c76070d51b74f9709eaca04ed1c1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 1, y: 1.2}
+        m_Offset: {x: 0, y: -0.26}
     - _DistortionVectorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -157,21 +158,21 @@ Material:
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
-    - _AlphaCutoff: 0.5
-    - _AlphaCutoffEnable: 0
+    - _AlphaCutoff: 0.001
+    - _AlphaCutoffEnable: 1
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 10
     - _AlphaRemapMax: 1
-    - _AlphaRemapMin: 0
+    - _AlphaRemapMin: 0.09251649
     - _AlphaSrcBlend: 1
     - _Anisotropy: 0
     - _BlendMode: 0
     - _CoatMask: 0
     - _CullMode: 0
     - _CullModeForward: 0
-    - _Cutoff: 0.5
+    - _Cutoff: 0.001
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -204,7 +205,7 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 10
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 0.559
+    - _EmissiveExposureWeight: 0.918
     - _EmissiveIntensity: 6.1344104
     - _EmissiveIntensityUnit: 0
     - _EnableBlendModePreserveSpecularLighting: 1
@@ -241,9 +242,9 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Perturb: 1
-    - _PerturbNoiseSpeedX: 0.01
-    - _PerturbNoiseSpeedY: 0.39
-    - _PerturbRate: 1
+    - _PerturbNoiseSpeedX: 0
+    - _PerturbNoiseSpeedY: 0.57
+    - _PerturbRate: 0.902
     - _RayTracing: 0
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
@@ -293,11 +294,11 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.05882348, g: 0.07058818, b: 0.7490196, a: 1}
+    - _Color: {r: 0.864409, g: 0.8665595, b: 0.99056596, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 15.312624, g: 18.536333, b: 205.51154, a: 6.1344104}
+    - _EmissiveColor: {r: 16.777088, g: 16.111763, b: 126.507164, a: 6.1344104}
     - _EmissiveColorLDR: {r: 0.88031507, g: 0.88031507, b: 0.88031507, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
@@ -307,7 +308,7 @@ Material:
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
-    - _UnlitColor: {r: 0.058823504, g: 0.07058821, b: 0.7490196, a: 1}
+    - _UnlitColor: {r: 0.864409, g: 0.86655945, b: 0.990566, a: 1}
     - _UnlitColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3429569971630323749
