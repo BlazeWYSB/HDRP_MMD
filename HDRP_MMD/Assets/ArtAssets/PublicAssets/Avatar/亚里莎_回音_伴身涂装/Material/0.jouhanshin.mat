@@ -186,7 +186,7 @@ Material:
     - _AlphaRemapMax: 1
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
-    - _Anisotropy: 0.039
+    - _Anisotropy: -0.389
     - _BlendMode: 0
     - _BumpScale: 1
     - _CoatMask: 0
@@ -249,8 +249,8 @@ Material:
     - _IncludeIndirectLighting: 1
     - _InvTilingScale: 1
     - _Ior: 1.5
-    - _IridescenceMask: 0.451
-    - _IridescenceThickness: 1
+    - _IridescenceMask: 0.718
+    - _IridescenceThickness: 0.478
     - _LinkDetailsWithBase: 1
     - _MaterialID: 1
     - _Metallic: 1

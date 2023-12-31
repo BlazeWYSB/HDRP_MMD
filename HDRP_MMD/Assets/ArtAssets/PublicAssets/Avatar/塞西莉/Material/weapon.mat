@@ -79,7 +79,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
-        m_Texture: {fileID: 2800000, guid: 2805b523639994f4cb30a70198a647dd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 736622c70d6fafb4ca077d7b9197f114, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FuzzMap:
@@ -191,7 +191,7 @@ Material:
     - _BumpScale: 1
     - _CoatMask: 0
     - _ConservativeDepthOffsetEnable: 0
-    - _CubeMapBrightness: 0.308
+    - _CubeMapBrightness: 0.7
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
@@ -225,8 +225,8 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 0.992
-    - _EmissiveIntensity: 123737.69
+    - _EmissiveExposureWeight: 0.6
+    - _EmissiveIntensity: 52.345734
     - _EmissiveIntensityUnit: 1
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
@@ -319,7 +319,7 @@ Material:
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UVSec: 0
-    - _UseEmissiveIntensity: 0
+    - _UseEmissiveIntensity: 1
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
@@ -328,15 +328,15 @@ Material:
     - _ZWrite: 1
     - _useThreadMap: 1
     m_Colors:
-    - _BaseColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CustomMainLightDirection: {r: 27.1, g: 2.31, b: 0, a: 0}
     - _DiffusionProfileAsset: {r: 5.626119e+24, g: 1.0337689e+32, b: 5.9376424e-37, a: -1.439358e-36}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 6576.3696, g: 6576.3696, b: 6576.3696, a: 123737.69}
-    - _EmissiveColorLDR: {r: 0.88031507, g: 0.88031507, b: 0.88031507, a: 1}
+    - _EmissiveColor: {r: 52.345734, g: 52.345734, b: 52.345734, a: 52.345734}
+    - _EmissiveColorLDR: {r: 1, g: 1, b: 1, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}

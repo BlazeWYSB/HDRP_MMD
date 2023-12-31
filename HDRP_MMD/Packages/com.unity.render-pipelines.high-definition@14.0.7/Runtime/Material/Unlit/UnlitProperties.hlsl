@@ -5,7 +5,13 @@ TEXTURE2D(_UnlitColorMap);
 SAMPLER(sampler_UnlitColorMap);
 
 TEXTURE2D(_EmissiveColorMap);
-SAMPLER(sampler_EmissiveColorMap);
+SAMPLER(sampler_EmissiveColorMap);       
+//Blaze: Dissolve and Perturb
+#if defined(_DISSOLVE_ON) || defined(_PERTURB_ON)
+TEXTURE2D(_PerturbMap);       SAMPLER(sampler_PerturbMap);    
+TEXTURE2D(_DissolveMap);       SAMPLER(sampler_DissolveMap);
+#endif
+//
 
 CBUFFER_START(UnityPerMaterial)
 
@@ -13,6 +19,10 @@ float4  _UnlitColor;
 float4 _UnlitColorMap_ST;
 float4 _UnlitColorMap_TexelSize;
 float4 _UnlitColorMap_MipInfo;
+//Blaze: Dissolve and Perturb
+float4 _PerturbMap_ST;           
+float4 _DissolveMap_ST;
+//
 
 float3 _EmissiveColor;
 float4 _EmissiveColorMap_ST;
@@ -29,6 +39,12 @@ float4 _DistortionVectorMap_ST;
 float _AlphaRemapMin;
 float _AlphaRemapMax;
 float _BlendMode;
+//Blaze: Dissolve and Perturb
+half _PerturbNoiseSpeedX;
+half _PerturbNoiseSpeedY;      
+half _PerturbRate;
+half _DissolveRate;
+//
 
 // Caution: C# code in BaseLitUI.cs call LightmapEmissionFlagsProperty() which assume that there is an existing "_EmissionColor"
 // value that exist to identify if the GI emission need to be enabled.

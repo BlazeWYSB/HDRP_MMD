@@ -11,12 +11,29 @@
 // Fill SurfaceData/Builtin data function
 //-------------------------------------------------------------------------------------
 void GetSurfaceAndBuiltinData(FragInputs input, float3 V, inout PositionInputs posInput, out SurfaceData surfaceData, out BuiltinData builtinData RAY_TRACING_OPTIONAL_PARAMETERS)
-{
+{ 
+    //Blaze: Dissolve and Perturb
+    float2 originUV = input.texCoord0.xy;
+#if defined(_PERTURB_ON) 
+    float2 perturbUV = input.texCoord0.xy + _Time.y * float2(_PerturbNoiseSpeedX, _PerturbNoiseSpeedY);
+    input.texCoord0.xy += (SAMPLE_TEXTURE2D(_PerturbMap, sampler_PerturbMap, perturbUV*_PerturbMap_ST.xy+_PerturbMap_ST.zw).rg * _PerturbRate);
+#endif
+    //
     float2 unlitColorMapUv = TRANSFORM_TEX(input.texCoord0.xy, _UnlitColorMap);
     surfaceData.color = SAMPLE_TEXTURE2D(_UnlitColorMap, sampler_UnlitColorMap, unlitColorMapUv).rgb * _UnlitColor.rgb;
     float alpha = SAMPLE_TEXTURE2D(_UnlitColorMap, sampler_UnlitColorMap, unlitColorMapUv).a;
     alpha = lerp(_AlphaRemapMin, _AlphaRemapMax, alpha);
     alpha *= _UnlitColor.a;
+
+//Blaze: Dissolve and Perturb
+#if defined(_DISSOLVE_ON)          
+#if defined(_DISSOLVE_SOFT) 
+     alpha *= saturate(SAMPLE_TEXTURE2D(_DissolveMap, sampler_DissolveMap, lerp(input.texCoord0.xy,originUV,0.5) * _DissolveMap_ST.xy+_DissolveMap_ST.zw).r + 1 - 2 * _DissolveRate);
+#else                        
+     alpha *= saturate(SAMPLE_TEXTURE2D(_DissolveMap, sampler_DissolveMap, lerp(input.texCoord0.xy,originUV,0.5) * _DissolveMap_ST.xy+_DissolveMap_ST.zw).r * (1-_DissolveRate)+_DissolveRate);  
+#endif
+#endif
+//
 
     // The shader graph can require to export the geometry normal. We thus need to initialize this variable
     surfaceData.normalWS = 0.0;

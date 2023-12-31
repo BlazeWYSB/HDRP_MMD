@@ -1352,5 +1352,15 @@ namespace UnityEngine.Rendering.HighDefinition
         internal const string kMatCap = "_MatCap";
         internal const string kOutlineStrength = "_OutlineStrength";
         internal const string kCubeMapBrightness = "_CubeMapBrightness";
+
+        internal const string kPerturbMap = "_PerturbMap";
+        internal const string kDissolveMap = "_DissolveMap";
+        internal const string kPerturbNoiseSpeedX = "_PerturbNoiseSpeedX";
+        internal const string kPerturbNoiseSpeedY = "_PerturbNoiseSpeedY";
+        internal const string kPerturbRate = "_PerturbRate";
+        internal const string kDissolveRate = "_DissolveRate";
+        internal const string kDissolve = "_Dissolve";
+        internal const string kDissolveSoft = "_DissolveSoft";
+        internal const string kPerturb = "_Perturb";
     }
 }

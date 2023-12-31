@@ -79,7 +79,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
-        m_Texture: {fileID: 2800000, guid: 2805b523639994f4cb30a70198a647dd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 66b743520b165704094965f8a1dd8ba7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FuzzMap:
@@ -107,7 +107,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8900000, guid: 258a5d4e6082ac94e8d49145b51964e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NPRAOMap:
@@ -191,7 +191,7 @@ Material:
     - _BumpScale: 1
     - _CoatMask: 0
     - _ConservativeDepthOffsetEnable: 0
-    - _CubeMapBrightness: 0
+    - _CubeMapBrightness: 0.125
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
