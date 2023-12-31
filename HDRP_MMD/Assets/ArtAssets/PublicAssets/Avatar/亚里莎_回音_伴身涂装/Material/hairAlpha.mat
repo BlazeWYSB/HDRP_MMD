@@ -169,7 +169,7 @@ Material:
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 10
-    - _AlphaRemapMax: 1
+    - _AlphaRemapMax: 0.5829959
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
     - _AlphaThresholdShadow: 0.5
@@ -196,8 +196,8 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 10
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 1
-    - _EmissiveIntensity: 1
+    - _EmissiveExposureWeight: 0.995
+    - _EmissiveIntensity: 0.77926874
     - _EmissiveIntensityUnit: 0
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 0
@@ -246,7 +246,7 @@ Material:
     - _RequireSplitLighting: 0
     - _SecondarySpecular: 1
     - _SecondarySpecularShift: 0.71
-    - _Smoothness: 0
+    - _Smoothness: 0.5
     - _SmoothnessMax: 0.61
     - _SmoothnessMin: 0.141
     - _SmoothnessRemapMax: 1
@@ -289,22 +289,22 @@ Material:
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UVSec: 0
-    - _UseEmissiveIntensity: 0
+    - _UseEmissiveIntensity: 1
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 2
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 2
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.99528295, b: 0.99528295, a: 0.6039216}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 0.99528295, b: 0.99528295, a: 0.6039216}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CustomMainLightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset: {r: -1.4301837e-11, g: -1.6132666e+22, b: 0.0000016304324, a: -1.2168727e-11}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColor: {r: 0.26618207, g: 0.18770035, b: 0.58368754, a: 0.77926874}
+    - _EmissiveColorLDR: {r: 0.6193322, g: 0.5279883, b: 0.88031507, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
